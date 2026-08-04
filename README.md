@@ -1,6 +1,6 @@
 # Hol a víz? — Magyarország folyóvíz-forgalma
 
-A holadelej.hu stílusát követő oldal, amely az országba belépő és onnan kilépő
+Az országba belépő és onnan kilépő
 folyók vízhozamát (m³/s) mutatja térképen, kártyákon és táblázatban.
 
 **Publikált artifact:** https://claude.ai/code/artifact/09b358d9-1bad-44e0-a033-515304a4dc84
@@ -53,7 +53,7 @@ Dráva 502). A Dráva KÖQ belépő értéke számított: Botovo 473 − Mura 16
 
 ## Publikálás saját domainre
 
-Az msklc.hu-ra (vagy aldomainre) való kitétel lépései a
+
 [PUBLIKALAS.md](PUBLIKALAS.md)-ben: GitHub Pages + a kész
 `.github/workflows/refresh.yml` (napi automatikus adatfrissítéssel), illetve
 alternatívaként hagyományos FTP-s tárhely.
