@@ -1,0 +1,446 @@
+[
+{
+"id": "duna",
+"name": "Duna",
+"dir": "both",
+"qin": 1906,
+"inAt": "Rajka–Vámosszabadi",
+"qout": 2342,
+"outAt": "Mohács",
+"grad": [
+0,
+0,
+0,
+1
+],
+"labIn": [
+-10,
+-12,
+"end"
+],
+"labOut": [
+14,
+6,
+"start"
+],
+"fromTo": "Ausztria–Szlovákia felől érkezik, Horvátország–Szerbia felé távozik",
+"mouth": "Fekete-tenger",
+"note": "A bősi (Gabčíkovo) erőmű óta a víz egy része szlovák oldali üzemvízcsatornán érkezik, Vámosszabadinál már újra egy mederben. A Mosoni-Duna ágat külön mutatjuk."
+},
+{
+"id": "mosoni-duna",
+"name": "Mosoni-Duna",
+"dir": "in",
+"qin": 24.4,
+"inAt": "Rajka, 6. zsilip",
+"labIn": [
+2,
+32,
+"end"
+],
+"fromTo": "a Duna mellékága, a dunacsúnyi (Čunovo) tározóból táplálják",
+"mouth": "Duna (Vének)",
+"note": "Nem önálló folyó: a Duna Szigetköz déli oldalán futó mellékága, vizét zsilipen át kapja."
+},
+{
+"id": "lajta",
+"name": "Lajta",
+"dir": "in",
+"qin": 7.8,
+"inAt": "Hegyeshalom",
+"labIn": [
+-16,
+-8,
+"end"
+],
+"fromTo": "Ausztriából érkezik",
+"mouth": "Mosoni-Duna (Mosonmagyaróvár)",
+"note": "A torkolatnál (Mosonmagyaróvár) a középvízhozama már ~9,6 m³/s."
+},
+{
+"id": "raba",
+"name": "Rába",
+"dir": "in",
+"qin": 21.6,
+"inAt": "Szentgotthárd",
+"labIn": [
+-16,
+-10,
+"end"
+],
+"fromTo": "Ausztriából érkezik",
+"mouth": "Mosoni-Duna (Győr)",
+"note": "A szentgotthárdi érték a közvetlenül a határnál betorkolló Lapincs (Lafnitz) vizét is tartalmazza. Győrnél már ~27 m³/s."
+},
+{
+"id": "pinka",
+"name": "Pinka",
+"dir": "in",
+"qin": 3.2,
+"inAt": "Felsőcsatár",
+"labIn": [
+-12,
+-4,
+"end"
+],
+"fromTo": "Ausztriából érkezik, többször átlépi a határt",
+"mouth": "Rába (Körmend alatt)",
+"note": ""
+},
+{
+"id": "repce",
+"name": "Répce",
+"dir": "in",
+"qin": 2.2,
+"inAt": "Répcevis",
+"labIn": [
+-12,
+-6,
+"end"
+],
+"fromTo": "Ausztriából érkezik",
+"mouth": "Rábca néven a Mosoni-Dunába (Győr)",
+"note": "Alsó szakasza Rábca néven fut; útközben felveszi az Ikvát is."
+},
+{
+"id": "kerka",
+"name": "Kerka",
+"dir": "in",
+"qin": 3.9,
+"inAt": "Tormafölde",
+"labIn": [
+-12,
+-8,
+"end"
+],
+"fromTo": "Szlovénia felől érkezik",
+"mouth": "Mura (Muraszemenye)",
+"note": ""
+},
+{
+"id": "mura",
+"name": "Mura",
+"dir": "in",
+"qin": 169,
+"inAt": "Letenye",
+"labIn": [
+-14,
+4,
+"end"
+],
+"fromTo": "Szlovénia–Horvátország felől, határfolyóként",
+"mouth": "Dráva (Legrád, az országhatáron)",
+"note": "Pontosan az országhatáron, Őrtilosnál torkollik a Drávába — vize a Drávával együtt hagyja el az országot."
+},
+{
+"id": "drava",
+"name": "Dráva",
+"dir": "both",
+"qin": 304,
+"inAt": "Őrtilos (számított)",
+"qout": 502,
+"outAt": "Drávaszabolcs–Matty",
+"grad": [
+0,
+0,
+1,
+0
+],
+"labIn": [
+-10,
+26,
+"end"
+],
+"labOut": [
+6,
+26,
+"middle"
+],
+"fromTo": "Horvátország felől érkezik, határfolyó, majd Horvátországba távozik",
+"mouth": "Duna (Almás/Aljmaš, HR)",
+"note": "A hivatalos belépő érték (473 m³/s, Botovo) a Murával együtt mérődik — itt a Mura (169) nélküli, számított hozam szerepel, hogy ne számoljunk kétszer."
+},
+{
+"id": "ipoly",
+"name": "Ipoly",
+"dir": "in",
+"qin": 4.2,
+"inAt": "Ipolytarnóc",
+"labIn": [
+4,
+-18,
+"middle"
+],
+"fromTo": "Szlovákiából érkezik, 143 km-en határfolyó",
+"mouth": "Duna (Szob)",
+"note": "A határszelvénynél még kicsi, de a torkolatnál (Szob) már ~22 m³/s — útközben a határ mindkét oldaláról gyarapszik."
+},
+{
+"id": "sajo",
+"name": "Sajó",
+"dir": "in",
+"qin": 17.7,
+"inAt": "Sajópüspöki",
+"labIn": [
+-2,
+-26,
+"middle"
+],
+"fromTo": "Szlovákiából érkezik",
+"mouth": "Tisza (Tiszaújváros)",
+"note": ""
+},
+{
+"id": "bodva",
+"name": "Bódva",
+"dir": "in",
+"qin": 3.7,
+"inAt": "Hidvégardó",
+"labIn": [
+2,
+-14,
+"middle"
+],
+"fromTo": "Szlovákiából érkezik",
+"mouth": "Sajó (Sajóecseg)",
+"note": ""
+},
+{
+"id": "hernad",
+"name": "Hernád",
+"dir": "in",
+"qin": 29.1,
+"inAt": "Hidasnémeti",
+"labIn": [
+24,
+0,
+"start"
+],
+"fromTo": "Szlovákiából érkezik",
+"mouth": "Sajó (Kesznyéten)",
+"note": ""
+},
+{
+"id": "bodrog",
+"name": "Bodrog",
+"dir": "in",
+"qin": 117,
+"inAt": "Felsőberecki",
+"labIn": [
+12,
+-6,
+"start"
+],
+"fromTo": "Szlovákiából érkezik (a Latorca és az Ondava egyesüléséből)",
+"mouth": "Tisza (Tokaj)",
+"note": ""
+},
+{
+"id": "tisza",
+"name": "Tisza",
+"dir": "both",
+"qin": 220,
+"inAt": "Tiszabecs",
+"qout": 855,
+"outAt": "Szeged–Tiszasziget",
+"grad": [
+1,
+0,
+0,
+1
+],
+"labIn": [
+10,
+-8,
+"start"
+],
+"labOut": [
+-12,
+16,
+"end"
+],
+"fromTo": "Ukrajnából érkezik, Szerbia felé távozik",
+"mouth": "Duna (Titel, RS)",
+"note": "Belépés után a Záhonyi-kanyarral az ukrán határ mentén fut, majd az Alföldön át dél felé. Kilépéskor már négyszer annyi vizet visz, mint érkezéskor."
+},
+{
+"id": "ronyva",
+"name": "Ronyva",
+"dir": "in",
+"qin": 0.9,
+"inAt": "Sátoraljaújhely",
+"fromTo": "Szlovákiából érkezik, részben határpatak",
+"mouth": "Bodrog (Sátoraljaújhely)",
+"note": "Becslés jellegű középvíz-érték; a térképen nem jelöljük külön."
+},
+{
+"id": "tur",
+"name": "Túr",
+"dir": "in",
+"qin": 10.3,
+"inAt": "Garbolc",
+"labIn": [
+14,
+18,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Tisza (Tiszakóród)",
+"note": ""
+},
+{
+"id": "szamos",
+"name": "Szamos",
+"dir": "in",
+"qin": 130,
+"inAt": "Csenger",
+"labIn": [
+8,
+22,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Tisza (Vásárosnamény)",
+"note": ""
+},
+{
+"id": "kraszna",
+"name": "Kraszna",
+"dir": "in",
+"qin": 7,
+"inAt": "Ágerdőmajor",
+"labIn": [
+6,
+36,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Tisza (Vásárosnamény)",
+"note": ""
+},
+{
+"id": "berettyo",
+"name": "Berettyó",
+"dir": "in",
+"qin": 9.8,
+"inAt": "Pocsaj",
+"labIn": [
+12,
+0,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Sebes-Körös (Szeghalom)",
+"note": ""
+},
+{
+"id": "sebes-koros",
+"name": "Sebes-Körös",
+"dir": "in",
+"qin": 24.5,
+"inAt": "Körösszakál",
+"labIn": [
+12,
+8,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Kettős-Körös → Hármas-Körös",
+"note": ""
+},
+{
+"id": "fekete-koros",
+"name": "Fekete-Körös",
+"dir": "in",
+"qin": 33.7,
+"inAt": "Sarkad",
+"labIn": [
+12,
+2,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Kettős-Körös (Szanazug)",
+"note": ""
+},
+{
+"id": "feher-koros",
+"name": "Fehér-Körös",
+"dir": "in",
+"qin": 23.4,
+"inAt": "Gyula",
+"labIn": [
+10,
+18,
+"start"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Kettős-Körös (Szanazug)",
+"note": ""
+},
+{
+"id": "maros",
+"name": "Maros",
+"dir": "in",
+"qin": 179,
+"inAt": "Makó (Nagylak)",
+"labIn": [
+18,
+24,
+"middle"
+],
+"fromTo": "Romániából érkezik",
+"mouth": "Tisza (Szeged)",
+"note": ""
+},
+{
+"id": "kettos-koros",
+"name": "Kettős-Körös",
+"dir": "dom",
+"qw": 60,
+"qnote": "~60 m³/s",
+"fromTo": "",
+"mouth": "",
+"note": "A Fehér- és a Fekete-Körös egyesülése Szanazugnál — hazai szakasz."
+},
+{
+"id": "harmas-koros",
+"name": "Hármas-Körös",
+"dir": "dom",
+"qw": 105,
+"qnote": "~105 m³/s",
+"fromTo": "",
+"mouth": "",
+"note": "A Kettős- és a Sebes-Körös egyesülése — Csongrádnál torkollik a Tiszába."
+},
+{
+"id": "zagyva",
+"name": "Zagyva",
+"dir": "dom",
+"qw": 8,
+"qnote": "~4 m³/s",
+"fromTo": "",
+"mouth": "",
+"note": "Teljes hosszában hazai folyó: a Mátrától Szolnokig, ott torkollik a Tiszába."
+},
+{
+"id": "zala",
+"name": "Zala",
+"dir": "dom",
+"qw": 8,
+"qnote": "~6 m³/s",
+"fromTo": "",
+"mouth": "",
+"note": "Hazai folyó, a Balaton legnagyobb táplálója (Keszthelynél torkollik)."
+},
+{
+"id": "sio",
+"name": "Sió",
+"dir": "dom",
+"qw": 12,
+"qnote": "zsiliptől függ",
+"fromTo": "",
+"mouth": "",
+"note": "A Balaton szabályozott leeresztő csatornája Siófoktól a Dunáig — hozama a zsilip nyitásától függ."
+}
+]

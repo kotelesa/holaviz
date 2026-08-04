@@ -1,0 +1,48 @@
+name: Napi frissítés és publikálás
+
+on:
+  schedule:
+    - cron: '35 8 * * *'   # UTC! — nyáron 10:35, télen 9:35 magyar idő
+  push:
+    branches: [main]
+  workflow_dispatch:        # kézi indítás az Actions fülről
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Ha a letöltés vagy az ellenőrzés hibázik, itt elhal a futás,
+      # és a tegnapi oldal marad kint — félkész állapot sosem kerül ki.
+      - name: Élő adatok letöltése és oldal összeállítása
+        run: |
+          python fetch_live.py
+          python build_page.py
+          mkdir -p _site
+          cp holaviz.html _site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
