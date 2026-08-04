@@ -125,14 +125,15 @@ g.riv .arr{transition:opacity .2s}
 .balance{margin-bottom:16px;padding:16px}
 .balance .ends{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
 .balance .ends b{font-variant-numeric:tabular-nums}
-.balance .bar{height:14px;border-radius:8px;overflow:hidden;display:flex;background:#1B2C46;border:1px solid var(--line)}
-.balance .bar i{display:block;height:100%}
-.balance .bar .bin{background:linear-gradient(90deg,#2B67B4,var(--in))}
-.balance .bar .bdom{background:linear-gradient(90deg,#5E7898,#8FA8C4)}
+.balance .ends .lbl:first-child{color:#6FAEF2}
+.balance .ends .lbl:last-child{color:#F08A8A}
+.balance .bar{height:16px;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--line);
+  background:linear-gradient(90deg,#2E6FC4 0%,#3987E5 22%,#9678C0 52%,#E66767 82%,#D95555 100%)}
+.balance .bar .mark{position:absolute;top:0;bottom:0;width:3px;background:var(--ground);
+  box-shadow:0 0 0 1.5px rgba(234,242,250,.6)}
 .balance .cap2{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:10px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);flex-wrap:wrap}
 .balance .cap2 b{color:var(--ink-2)}
-.balance .cap2 .din{color:#6FAEF2} .balance .cap2 .dhl{color:#8FA8C4}
 
 /* ---------- perspektíva ---------- */
 .persp{margin-bottom:16px;padding:16px}
@@ -525,16 +526,17 @@ document.getElementById('kpis').innerHTML = KPIS.map(k=>`
     <div class="share"><i style="width:${Math.max(2,k.share*100)}%;background:${k.col}"></i></div>
   </div>`).join('');
 
-/* ---- mérleg sáv (élő) ---- */
+/* ---- mérleg sáv (élő) ----
+   a sáv kék→korall átmenete a víz útját jelzi: balról belép, jobbra kilép;
+   pozitív hazai hozzáadásnál jelölő mutatja, meddig tart a külföldi hányad */
 document.getElementById('balbar').innerHTML = QDOML>=0
-  ? `<i class="bin" style="width:${QINL/QOUTL*100}%"></i><i class="bdom" style="width:${QDOML/QOUTL*100}%"></i>`
-  : `<i class="bin" style="width:100%"></i>`;
+  ? `<i class="mark" style="left:${(QINL/QOUTL*100).toFixed(1)}%"></i>` : '';
 document.getElementById('balcap').innerHTML =
-  `<span><b class="din">■</b> külföldről lép be most: <b>${fmt(QINL)} m³/s</b></span>
+  `<span>külföldről lép be most: <b style="color:#6FAEF2">${fmt(QINL)} m³/s</b></span>
    ${QDOML>=0
-     ? `<span><b class="dhl">■</b> itthon keletkezik: <b>+${fmt(QDOML)} m³/s (${Math.round(QDOML/QOUTL*100)}%)</b></span>`
-     : `<span><b class="dhl">■</b> útközben elfogy (párolgás, vízkivétel): <b>${fmt(QDOML)} m³/s</b></span>`}
-   <span>összesen kilép most: <b>${fmt(QOUTL)} m³/s</b></span>
+     ? `<span>itthon keletkezik (a jelöléstől jobbra): <b>+${fmt(QDOML)} m³/s (${Math.round(QDOML/QOUTL*100)}%)</b></span>`
+     : `<span>útközben elfogy (párolgás, vízkivétel): <b>${fmt(QDOML)} m³/s</b></span>`}
+   <span>összesen kilép most: <b style="color:#F08A8A">${fmt(QOUTL)} m³/s</b></span>
    <span class="muted">sokéves közép: be ${fmt(QIN)} · itthon +${fmt(QDOM)} · ki ${fmt(QOUT)}</span>`;
 
 /* ---- perspektíva (élő belépő hozamra) ---- */
