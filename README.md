@@ -3,7 +3,9 @@
 Az országba belépő és onnan kilépő
 folyók vízhozamát (m³/s) mutatja térképen, kártyákon és táblázatban.
 
-**Publikált artifact:** https://claude.ai/code/artifact/09b358d9-1bad-44e0-a033-515304a4dc84
+**Élő oldal:** https://viz.msklc.hu (GitHub Pages, repó: [kotelesa/holaviz](https://github.com/kotelesa/holaviz),
+napi automatikus frissítés GitHub Actions-szel) ·
+**Claude-artifact:** https://claude.ai/code/artifact/09b358d9-1bad-44e0-a033-515304a4dc84
 
 ## Fájlok
 
