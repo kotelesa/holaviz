@@ -1,118 +1,98 @@
-<title>Hol a víz? — Magyarország folyóvíz-forgalma</title>
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hol a víz? — Magyarország folyóvíz-forgalma</title>
+<meta name="description" content="Magyarország élő folyóvíz-forgalma: belépő és kilépő vízhozamok, a Duna paksi vízállása — napi hydroinfo.hu adatokból.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
 <style>
 :root{
-  --ground:#070C12; --panel:#101A24; --line:#22333F;
-  --ink:#E8F1F7; --ink-2:#A8BCCC; --ink-3:#6E7F8D;
-  --in:#3DDCC8; --out:#FF9B3D; --hl:#FFD24A; --alarm:#FF5470;
-  --river:#3E5B70; --lake:#16303E; --on-fill:#07131A;
-  --font-mono:ui-monospace,"SF Mono",SFMono-Regular,"Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+  --ground:#0B1626; --panel:#13233B; --line:#263A58;
+  --ink:#EAF2FA; --ink-2:#AFC3D9; --ink-3:#71869E;
+  --in:#3987E5; --out:#E66767; --hl:#F2F7FB; --alarm:#E66767;
+  --river:#3D5C80; --lake:#173350; --on-fill:#0B1626;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
   background:var(--ground); color:var(--ink);
-  font-family:var(--font-mono); font-size:14px; line-height:1.45;
+  font-family:var(--font-sans); font-size:14px; line-height:1.45;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
 }
 body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none;
   background:
-    radial-gradient(38% 42% at 22% 28%, rgba(61,220,200,.13), transparent 70%),
-    radial-gradient(34% 38% at 78% 68%, rgba(255,155,61,.10), transparent 70%),
-    radial-gradient(30% 34% at 60% 12%, rgba(111,168,255,.07), transparent 70%);}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(61,220,200,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(61,220,200,.045) 1px,transparent 1px);
-  background-size:46px 46px;
-  mask-image:radial-gradient(120% 100% at 50% 0%, #000 30%, transparent 90%);}
+    radial-gradient(38% 42% at 22% 28%, rgba(57,135,229,.10), transparent 70%),
+    radial-gradient(34% 38% at 78% 68%, rgba(230,103,103,.07), transparent 70%);}
 .wrap{max-width:1440px;margin:0 auto;padding:18px 20px 44px;position:relative}
-.sweep{position:fixed;inset:0;z-index:50;pointer-events:none;
-  background:linear-gradient(100deg,transparent 42%,rgba(61,220,200,.14) 50%,transparent 58%);
-  background-size:220% 100%;background-position:120% 0;
-  animation:sweep 1.5s cubic-bezier(.5,0,.3,1) forwards;}
-@keyframes sweep{from{background-position:120% 0}to{background-position:-120% 0}}
 
 /* ---------- fejléc ---------- */
 .rail{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
-  border:1px solid var(--line);border-radius:4px;padding:12px 16px;margin-bottom:16px;
-  background:linear-gradient(165deg,rgba(255,255,255,.05),transparent 45%),var(--panel);}
-.brand h1{margin:0;font-size:27px;font-weight:700;letter-spacing:-.055em;line-height:1;
-  position:relative;display:block;padding-bottom:15px;white-space:nowrap;
-  color:var(--ink);text-shadow:0 0 14px rgba(61,220,200,.28);}
-.brand h1 .q{position:relative;color:var(--hl);margin-left:.05em;display:inline-block;
-  text-shadow:0 0 12px rgba(255,210,74,.7),0 0 30px rgba(255,210,74,.35);
-  animation:qpulse 2.6s ease-in-out 1.9s infinite;}
-@keyframes qpulse{0%,100%{opacity:1}50%{opacity:.55}}
-.brand .trace{position:absolute;left:0;right:0;bottom:0;height:14px;width:100%;overflow:visible;pointer-events:none}
-.brand .trace path{fill:none;stroke:var(--in);stroke-width:2;stroke-linecap:round;
-  filter:drop-shadow(0 0 4px rgba(61,220,200,.85));
-  stroke-dasharray:6 220;animation:trace 4s linear infinite;}
-@keyframes trace{from{stroke-dashoffset:226}to{stroke-dashoffset:0}}
-.brand .sub{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:6px}
-.ecg{display:flex;flex-direction:column;gap:4px;justify-content:center;min-width:0}
-.ecg .wave{height:26px;width:100%;overflow:hidden}
-.ecg .wave path{fill:none;stroke:var(--in);stroke-width:1.6;opacity:.85;
-  filter:drop-shadow(0 0 3px rgba(61,220,200,.6));}
-.ecg .cap{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.ecg .cap .big{font-size:15px;font-weight:700}
+  border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:16px;
+  background:var(--panel);}
+.brand h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1;
+  display:block;white-space:nowrap;color:var(--ink);}
+.brand h1 .q{color:var(--in);margin-left:.05em;display:inline-block;}
+.brand .sub{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:7px}
+.ecg{display:flex;flex-direction:column;gap:5px;justify-content:center;min-width:0}
+.ecg .cap{display:flex;flex-direction:column;gap:4px}
+.ecg .cap .big{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
 .ecg .cap .big i{font-style:normal;color:var(--in)}
 .ecg .cap .big em{font-style:normal;color:var(--out)}
-.ecg .cap .lbl{font-size:9.5px;letter-spacing:.05em}
+.ecg .cap .lbl{font-size:10px;letter-spacing:.04em}
 .clock{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-.clock .t{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.clock .t{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  border:1px solid var(--line);border-radius:2px;padding:3px 8px;color:var(--ink-2)}
-.pill b{width:6px;height:6px;border-radius:50%;background:var(--in);box-shadow:0 0 8px var(--in);flex:none}
-.pill.warn{border-color:rgba(255,155,61,.55);color:var(--out)}
-.pill.warn b{background:var(--out);box-shadow:0 0 10px var(--out)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;padding:4px 11px;color:var(--ink-2)}
+.pill b{width:6px;height:6px;border-radius:50%;background:var(--in);flex:none}
+.pill.warn{border-color:rgba(230,103,103,.6);color:var(--out)}
+.pill.warn b{background:var(--out)}
 
 .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
 
 /* ---------- térkép ---------- */
-.card{background:linear-gradient(165deg,rgba(255,255,255,.05),transparent 45%),var(--panel);
-  border:1px solid var(--line);border-radius:4px;padding:14px 16px;position:relative;overflow:hidden;}
+.card{background:var(--panel);
+  border:1px solid var(--line);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden;}
 .mapwrap{margin-bottom:16px}
 .map{padding:6px 6px 12px}
-.map .hint{position:absolute;left:18px;top:16px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+.map .hint{position:absolute;left:18px;top:16px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink-3);pointer-events:none;z-index:3;transition:opacity .4s}
 .map svg{display:block;width:100%;height:auto}
-#hun{fill:#0E1B26;stroke:#3A5262;stroke-width:1.2;stroke-linejoin:round}
-.lake{fill:var(--lake);stroke:#24455A;stroke-width:.7}
-.river{fill:none;stroke:var(--river);stroke-linecap:round;stroke-linejoin:round;transition:filter .2s}
+#hun{fill:#10203A;stroke:#3C5B82;stroke-width:1.2;stroke-linejoin:round}
+.lake{fill:var(--lake);stroke:#2A4A72;stroke-width:.7}
+.river{fill:none;stroke:var(--river);stroke-linecap:round;stroke-linejoin:round;transition:opacity .2s}
 .river.in{stroke:var(--in)}
 .river.out{stroke:var(--out)}
-.river.dom{stroke:#31485A}
-.rflow{fill:none;stroke:rgba(232,241,247,.5);stroke-linecap:round;pointer-events:none;
+.river.dom{stroke:#35507A}
+.rflow{fill:none;stroke:rgba(234,242,250,.45);stroke-linecap:round;pointer-events:none;
   stroke-dasharray:1.5 26;animation:rflow 3.2s linear infinite}
 @keyframes rflow{from{stroke-dashoffset:27.5}to{stroke-dashoffset:0}}
 .rhit{fill:none;stroke:transparent;stroke-width:16;stroke-linecap:round;cursor:crosshair}
-g.riv.hot .river{filter:drop-shadow(0 0 6px currentColor) brightness(1.25)}
+g.riv.hot .river{filter:brightness(1.3)}
 g.riv.dim .river,g.riv.dim .rflow,g.riv.dim .arr{opacity:.22}
 g.riv .arr{transition:opacity .2s}
-.city{fill:#8CA1B4}
-.cityl{fill:#5B7185;font-size:10px;letter-spacing:.06em}
-.country{fill:#44596B;font-size:11px;letter-spacing:.3em;font-weight:700}
+.city{fill:#93A9C2}
+.cityl{fill:#6B8199;font-size:10px;letter-spacing:.06em}
+.country{fill:#4A6382;font-size:11px;letter-spacing:.3em;font-weight:700}
 .arr text{font-size:10.5px;font-weight:700;letter-spacing:.02em}
-.arr .rn{fill:var(--ink-2);font-weight:400;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
-.arr.in text.rv{fill:var(--in)} .arr.out text.rv{fill:var(--out)}
+.arr .rn{fill:var(--ink-2);font-weight:400;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.arr.in text.rv{fill:#6FAEF2} .arr.out text.rv{fill:#F08A8A}
 .arr text.rv.koq{fill:var(--ink-3);font-weight:400}
-.arr .head{filter:drop-shadow(0 0 4px currentColor)}
 /* paksi vízállás-jelölő */
 .pmark{cursor:crosshair}
-.pmark .dot{fill:var(--hl);filter:drop-shadow(0 0 6px rgba(255,210,74,.9))}
+.pmark .dot{fill:var(--hl)}
 .pmark .ring{fill:none;stroke:var(--hl);stroke-width:1.2;animation:pring 2.4s ease-out infinite}
 @keyframes pring{0%{r:4px;opacity:.9}70%{r:14px;opacity:0}100%{r:14px;opacity:0}}
-.pmark .pn{fill:var(--ink-3);font-size:9px;letter-spacing:.12em}
-.pmark .pv{fill:var(--hl);font-size:13.5px;font-weight:700;letter-spacing:.02em;
-  filter:drop-shadow(0 0 7px rgba(255,210,74,.55))}
+.pmark .pn{fill:var(--ink-3);font-size:9px;letter-spacing:.1em}
+.pmark .pv{fill:var(--hl);font-size:13.5px;font-weight:800;letter-spacing:.02em}
 .maptip{position:absolute;z-index:5;pointer-events:none;min-width:190px;max-width:260px;
-  background:rgba(7,12,18,.94);border:1px solid var(--line);border-radius:3px;padding:9px 11px;
+  background:rgba(10,19,34,.96);border:1px solid var(--line);border-radius:10px;padding:9px 11px;
   font-size:11.5px;opacity:0;transition:opacity .15s;box-shadow:0 6px 24px rgba(0,0,0,.5)}
 .maptip.on{opacity:1}
 .maptip h4{margin:0 0 5px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
-.maptip .row{display:flex;justify-content:space-between;gap:10px;padding:2px 0;border-top:1px dashed #1B2A36}
+.maptip .row{display:flex;justify-content:space-between;gap:10px;padding:2px 0;border-top:1px dashed #223550}
 .maptip .row:first-of-type{border-top:0}
 .maptip .row span{color:var(--ink-3);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
 .maptip .row b{font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -137,7 +117,7 @@ g.riv .arr{transition:opacity .2s}
 .kpi .v{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
 .kpi .v .u{font-size:12px;font-weight:400;color:var(--ink-3);margin-left:4px;letter-spacing:0}
 .kpi .note{margin-top:8px;font-size:10.5px;color:var(--ink-3);line-height:1.5;min-height:3em}
-.kpi .share{margin-top:10px;height:4px;border-radius:2px;background:#16232E;overflow:hidden}
+.kpi .share{margin-top:10px;height:4px;border-radius:2px;background:#1B2C46;overflow:hidden}
 .kpi .share i{display:block;height:100%;border-radius:2px}
 .kpi.tin .v{color:var(--in)} .kpi.tout .v{color:var(--out)} .kpi.thl .v{color:var(--hl)}
 
@@ -145,19 +125,19 @@ g.riv .arr{transition:opacity .2s}
 .balance{margin-bottom:16px;padding:16px}
 .balance .ends{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
 .balance .ends b{font-variant-numeric:tabular-nums}
-.balance .bar{height:14px;border-radius:2px;overflow:hidden;display:flex;background:#16232E;border:1px solid var(--line)}
+.balance .bar{height:14px;border-radius:8px;overflow:hidden;display:flex;background:#1B2C46;border:1px solid var(--line)}
 .balance .bar i{display:block;height:100%}
-.balance .bar .bin{background:linear-gradient(90deg,#2AA895,var(--in));box-shadow:0 0 12px rgba(61,220,200,.35)}
-.balance .bar .bdom{background:linear-gradient(90deg,#C9A03B,var(--hl))}
+.balance .bar .bin{background:linear-gradient(90deg,#2B67B4,var(--in))}
+.balance .bar .bdom{background:linear-gradient(90deg,#5E7898,#8FA8C4)}
 .balance .cap2{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:10px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);flex-wrap:wrap}
 .balance .cap2 b{color:var(--ink-2)}
-.balance .cap2 .din{color:var(--in)} .balance .cap2 .dhl{color:var(--hl)}
+.balance .cap2 .din{color:#6FAEF2} .balance .cap2 .dhl{color:#8FA8C4}
 
 /* ---------- perspektíva ---------- */
 .persp{margin-bottom:16px;padding:16px}
 .persp .items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:12px}
-.persp .it{border:1px dashed #1B2A36;border-radius:3px;padding:12px 14px}
+.persp .it{border:1px dashed #223550;border-radius:10px;padding:12px 14px}
 .persp .it .big{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
 .persp .it .big u{text-decoration:none;color:var(--in)}
 .persp .it p{margin:6px 0 0;font-size:11px;color:var(--ink-2);line-height:1.55}
@@ -171,7 +151,7 @@ g.riv .arr{transition:opacity .2s}
 table{border-collapse:collapse;width:100%;min-width:760px;font-size:12px}
 th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:400;
   text-align:left;padding:6px 12px 6px 0;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:6px 12px 6px 0;border-bottom:1px solid #16232E;vertical-align:baseline}
+td{padding:6px 12px 6px 0;border-bottom:1px solid #1B2C46;vertical-align:baseline}
 td.q{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;white-space:nowrap}
 th.q{text-align:right}
 td .dir{display:inline-block;font-size:9px;letter-spacing:.1em;padding:1px 6px;border-radius:2px;margin-right:2px}
@@ -204,32 +184,20 @@ footer .src{margin-top:6px}
 }
 @media (prefers-reduced-motion:reduce){
   .rflow{animation:none;display:none}
-  .brand .trace path{animation:none;stroke-dasharray:none}
-  .brand h1 .q{animation:none}
   .pmark .ring{animation:none;opacity:.5}
-  .sweep{display:none}
 }
 </style>
-
-<div class="sweep"></div>
+</head>
+<body>
 <div class="wrap">
 
   <!-- fejléc -->
   <div class="rail">
     <div class="brand">
-      <h1>HOL&nbsp;A&nbsp;VÍZ<span class="q">?</span>
-        <svg class="trace" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0,7 C14,7 14,2 28,2 S42,12 56,12 70,2 84,2 98,12 112,12 126,2 140,2 154,12 168,12 182,2 196,2 210,7 220,7"/>
-        </svg>
-      </h1>
+      <h1>HOL&nbsp;A&nbsp;VÍZ<span class="q">?</span></h1>
       <div class="sub">Magyarország folyóvíz-forgalma · élő belépő és kilépő vízhozamok</div>
     </div>
     <div class="ecg">
-      <div class="wave">
-        <svg viewBox="0 0 600 26" preserveAspectRatio="none" aria-hidden="true" style="width:100%;height:100%">
-          <path id="wavepath" d="M0,13 Q25,3 50,13 T100,13 T150,13 T200,13 T250,13 T300,13 T350,13 T400,13 T450,13 T500,13 T550,13 T600,13"/>
-        </svg>
-      </div>
       <div class="cap">
         <span class="big">be <i id="hdrin">—</i> · ki <em id="hdrout">—</em> m³/s</span>
         <span class="lbl" id="hdrsub">élő reggeli hozamok</span>
@@ -308,7 +276,6 @@ footer .src{margin-top:6px}
     <div class="src">Adatforrások: élő adatok — <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>
     (OVSZ, napi hidrológiai adatok); sokéves közép — Országos Vízügyi Főigazgatóság
     (<a href="https://www.vizugy.hu" rel="noopener">vizugy.hu</a>, VGT3), Wikipédia. ·
-    Vizuális inspiráció: <a href="https://holadelej.hu" rel="noopener">holadelej.hu</a> ·
     Nem hivatalos, ismeretterjesztő oldal.</div>
   </footer>
 </div>
@@ -321,7 +288,7 @@ const GEO = {"view":{"w":1080,"h":706},"border":"M810.0,65.4 807.5,66.7 806.5,70
 const RIVERS = [{"id":"duna","name":"Duna","dir":"both","qin":1906,"inAt":"Rajka–Vámosszabadi","qout":2342,"outAt":"Mohács","grad":[0,0,0,1],"labIn":[-10,-12,"end"],"labOut":[14,6,"start"],"fromTo":"Ausztria–Szlovákia felől érkezik, Horvátország–Szerbia felé távozik","mouth":"Fekete-tenger","note":"A bősi (Gabčíkovo) erőmű óta a víz egy része szlovák oldali üzemvízcsatornán érkezik, Vámosszabadinál már újra egy mederben. A Mosoni-Duna ágat külön mutatjuk."},{"id":"mosoni-duna","name":"Mosoni-Duna","dir":"in","qin":24.4,"inAt":"Rajka, 6. zsilip","labIn":[2,32,"end"],"fromTo":"a Duna mellékága, a dunacsúnyi (Čunovo) tározóból táplálják","mouth":"Duna (Vének)","note":"Nem önálló folyó: a Duna Szigetköz déli oldalán futó mellékága, vizét zsilipen át kapja."},{"id":"lajta","name":"Lajta","dir":"in","qin":7.8,"inAt":"Hegyeshalom","labIn":[-16,-8,"end"],"fromTo":"Ausztriából érkezik","mouth":"Mosoni-Duna (Mosonmagyaróvár)","note":"A torkolatnál (Mosonmagyaróvár) a középvízhozama már ~9,6 m³/s."},{"id":"raba","name":"Rába","dir":"in","qin":21.6,"inAt":"Szentgotthárd","labIn":[-16,-10,"end"],"fromTo":"Ausztriából érkezik","mouth":"Mosoni-Duna (Győr)","note":"A szentgotthárdi érték a közvetlenül a határnál betorkolló Lapincs (Lafnitz) vizét is tartalmazza. Győrnél már ~27 m³/s."},{"id":"pinka","name":"Pinka","dir":"in","qin":3.2,"inAt":"Felsőcsatár","labIn":[-12,-4,"end"],"fromTo":"Ausztriából érkezik, többször átlépi a határt","mouth":"Rába (Körmend alatt)","note":""},{"id":"repce","name":"Répce","dir":"in","qin":2.2,"inAt":"Répcevis","labIn":[-12,-6,"end"],"fromTo":"Ausztriából érkezik","mouth":"Rábca néven a Mosoni-Dunába (Győr)","note":"Alsó szakasza Rábca néven fut; útközben felveszi az Ikvát is."},{"id":"kerka","name":"Kerka","dir":"in","qin":3.9,"inAt":"Tormafölde","labIn":[-12,-8,"end"],"fromTo":"Szlovénia felől érkezik","mouth":"Mura (Muraszemenye)","note":""},{"id":"mura","name":"Mura","dir":"in","qin":169,"inAt":"Letenye","labIn":[-14,4,"end"],"fromTo":"Szlovénia–Horvátország felől, határfolyóként","mouth":"Dráva (Legrád, az országhatáron)","note":"Pontosan az országhatáron, Őrtilosnál torkollik a Drávába — vize a Drávával együtt hagyja el az országot."},{"id":"drava","name":"Dráva","dir":"both","qin":304,"inAt":"Őrtilos (számított)","qout":502,"outAt":"Drávaszabolcs–Matty","grad":[0,0,1,0],"labIn":[-10,26,"end"],"labOut":[6,26,"middle"],"fromTo":"Horvátország felől érkezik, határfolyó, majd Horvátországba távozik","mouth":"Duna (Almás/Aljmaš, HR)","note":"A hivatalos belépő érték (473 m³/s, Botovo) a Murával együtt mérődik — itt a Mura (169) nélküli, számított hozam szerepel, hogy ne számoljunk kétszer."},{"id":"ipoly","name":"Ipoly","dir":"in","qin":4.2,"inAt":"Ipolytarnóc","labIn":[4,-18,"middle"],"fromTo":"Szlovákiából érkezik, 143 km-en határfolyó","mouth":"Duna (Szob)","note":"A határszelvénynél még kicsi, de a torkolatnál (Szob) már ~22 m³/s — útközben a határ mindkét oldaláról gyarapszik."},{"id":"sajo","name":"Sajó","dir":"in","qin":17.7,"inAt":"Sajópüspöki","labIn":[-2,-26,"middle"],"fromTo":"Szlovákiából érkezik","mouth":"Tisza (Tiszaújváros)","note":""},{"id":"bodva","name":"Bódva","dir":"in","qin":3.7,"inAt":"Hidvégardó","labIn":[2,-14,"middle"],"fromTo":"Szlovákiából érkezik","mouth":"Sajó (Sajóecseg)","note":""},{"id":"hernad","name":"Hernád","dir":"in","qin":29.1,"inAt":"Hidasnémeti","labIn":[24,0,"start"],"fromTo":"Szlovákiából érkezik","mouth":"Sajó (Kesznyéten)","note":""},{"id":"bodrog","name":"Bodrog","dir":"in","qin":117,"inAt":"Felsőberecki","labIn":[12,-6,"start"],"fromTo":"Szlovákiából érkezik (a Latorca és az Ondava egyesüléséből)","mouth":"Tisza (Tokaj)","note":""},{"id":"tisza","name":"Tisza","dir":"both","qin":220,"inAt":"Tiszabecs","qout":855,"outAt":"Szeged–Tiszasziget","grad":[1,0,0,1],"labIn":[10,-8,"start"],"labOut":[-12,16,"end"],"fromTo":"Ukrajnából érkezik, Szerbia felé távozik","mouth":"Duna (Titel, RS)","note":"Belépés után a Záhonyi-kanyarral az ukrán határ mentén fut, majd az Alföldön át dél felé. Kilépéskor már négyszer annyi vizet visz, mint érkezéskor."},{"id":"ronyva","name":"Ronyva","dir":"in","qin":0.9,"inAt":"Sátoraljaújhely","fromTo":"Szlovákiából érkezik, részben határpatak","mouth":"Bodrog (Sátoraljaújhely)","note":"Becslés jellegű középvíz-érték; a térképen nem jelöljük külön."},{"id":"tur","name":"Túr","dir":"in","qin":10.3,"inAt":"Garbolc","labIn":[14,18,"start"],"fromTo":"Romániából érkezik","mouth":"Tisza (Tiszakóród)","note":""},{"id":"szamos","name":"Szamos","dir":"in","qin":130,"inAt":"Csenger","labIn":[8,22,"start"],"fromTo":"Romániából érkezik","mouth":"Tisza (Vásárosnamény)","note":""},{"id":"kraszna","name":"Kraszna","dir":"in","qin":7,"inAt":"Ágerdőmajor","labIn":[6,36,"start"],"fromTo":"Romániából érkezik","mouth":"Tisza (Vásárosnamény)","note":""},{"id":"berettyo","name":"Berettyó","dir":"in","qin":9.8,"inAt":"Pocsaj","labIn":[12,0,"start"],"fromTo":"Romániából érkezik","mouth":"Sebes-Körös (Szeghalom)","note":""},{"id":"sebes-koros","name":"Sebes-Körös","dir":"in","qin":24.5,"inAt":"Körösszakál","labIn":[12,8,"start"],"fromTo":"Romániából érkezik","mouth":"Kettős-Körös → Hármas-Körös","note":""},{"id":"fekete-koros","name":"Fekete-Körös","dir":"in","qin":33.7,"inAt":"Sarkad","labIn":[12,2,"start"],"fromTo":"Romániából érkezik","mouth":"Kettős-Körös (Szanazug)","note":""},{"id":"feher-koros","name":"Fehér-Körös","dir":"in","qin":23.4,"inAt":"Gyula","labIn":[10,18,"start"],"fromTo":"Romániából érkezik","mouth":"Kettős-Körös (Szanazug)","note":""},{"id":"maros","name":"Maros","dir":"in","qin":179,"inAt":"Makó (Nagylak)","labIn":[18,24,"middle"],"fromTo":"Romániából érkezik","mouth":"Tisza (Szeged)","note":""},{"id":"kettos-koros","name":"Kettős-Körös","dir":"dom","qw":60,"qnote":"~60 m³/s","fromTo":"","mouth":"","note":"A Fehér- és a Fekete-Körös egyesülése Szanazugnál — hazai szakasz."},{"id":"harmas-koros","name":"Hármas-Körös","dir":"dom","qw":105,"qnote":"~105 m³/s","fromTo":"","mouth":"","note":"A Kettős- és a Sebes-Körös egyesülése — Csongrádnál torkollik a Tiszába."},{"id":"zagyva","name":"Zagyva","dir":"dom","qw":8,"qnote":"~4 m³/s","fromTo":"","mouth":"","note":"Teljes hosszában hazai folyó: a Mátrától Szolnokig, ott torkollik a Tiszába."},{"id":"zala","name":"Zala","dir":"dom","qw":8,"qnote":"~6 m³/s","fromTo":"","mouth":"","note":"Hazai folyó, a Balaton legnagyobb táplálója (Keszthelynél torkollik)."},{"id":"sio","name":"Sió","dir":"dom","qw":12,"qnote":"zsiliptől függ","fromTo":"","mouth":"","note":"A Balaton szabályozott leeresztő csatornája Siófoktól a Dunáig — hozama a zsilip nyitásától függ."}];
 
 /* ---- élő adatok: hydroinfo.hu napi táblái (reggeli észlelés) ---- */
-const LIVE = {"obs":"2026. augusztus 04.","fetched":"2026-08-04T11:57+02:00","fetched_hu":"2026. 08. 04. 11:57","source":"hydroinfo.hu (Országos Vízjelző Szolgálat)","rivers":{"duna":{"in":{"st":"Nagybajcs (Vámosszabadi)","level":-32,"chg":4,"q":650,"temp":24.8},"out":{"st":"Dunaszekcső (Mohács fölött)","level":-10,"chg":-4,"q":678,"temp":26.9}},"mosoni-duna":{"in":{"st":"Rajka, 6. zsilip","level":1397,"chg":0,"q":24.7,"temp":null}},"lajta":{"in":{"st":"Hegyeshalom","level":-8,"chg":-2,"q":null,"temp":25.1}},"raba":{"in":{"st":"Szentgotthárd","level":-118,"chg":-2,"q":4.44,"temp":19.8}},"pinka":{"in":{"st":"Felsőcsatár","level":30,"chg":0,"q":0.07,"temp":null}},"repce":{"in":{"st":"Répcevis","level":-6,"chg":1,"q":0.2,"temp":null}},"mura":{"in":{"st":"Letenye","level":92,"chg":0,"q":57.0,"temp":25.9}},"drava":{"in":{"st":"Őrtilos","level":-120,"chg":7,"q":215,"temp":25.9},"out":{"st":"Drávaszabolcs","level":-38,"chg":15,"q":209,"temp":26.8}},"ipoly":{"in":{"st":"Ipolytarnóc","level":30,"chg":1,"q":0.319,"temp":22.6}},"sajo":{"in":{"st":"Sajópüspöki","level":18,"chg":2,"q":2.89,"temp":23.3}},"bodva":{"in":{"st":"Hidvégardó","level":-33,"chg":-1,"q":0.276,"temp":19.8}},"hernad":{"in":{"st":"Hidasnémeti","level":-111,"chg":3,"q":9.51,"temp":null}},"bodrog":{"in":{"st":"Felsőberecki","level":174,"chg":-6,"q":12.1,"temp":25.7}},"tisza":{"in":{"st":"Tiszabecs","level":-238,"chg":0,"q":34.4,"temp":25.6},"out":{"st":"Szeged","level":60,"chg":0,"q":125,"temp":26.4}},"tur":{"in":{"st":"Garbolc","level":-99,"chg":-2,"q":0.771,"temp":24.3}},"szamos":{"in":{"st":"Csenger","level":-149,"chg":-1,"q":20.1,"temp":26.8}},"kraszna":{"in":{"st":"Ágerdőmajor","level":121,"chg":-4,"q":0.349,"temp":25.0}},"berettyo":{"in":{"st":"Pocsaj","level":-51,"chg":-2,"q":0.466,"temp":21.9}},"sebes-koros":{"in":{"st":"Körösszakál","level":-196,"chg":3,"q":0.961,"temp":25.2}},"fekete-koros":{"in":{"st":"Sarkad","level":117,"chg":-1,"q":0.936,"temp":26.4}},"feher-koros":{"in":{"st":"Gyula","level":106,"chg":-1,"q":0.0,"temp":24.0}},"maros":{"in":{"st":"Nagylak","level":-60,"chg":-12,"q":53.0,"temp":27.6}},"kettos-koros":{"w":{"st":"Doboz","level":365,"chg":0,"q":null,"temp":24.3}},"harmas-koros":{"w":{"st":"Kunszentmárton","level":-186,"chg":-1,"q":5.58,"temp":null}},"zagyva":{"w":{"st":"Jásztelek","level":107,"chg":-3,"q":null,"temp":26.0}},"zala":{"w":{"st":"Zalaapáti","level":90,"chg":0,"q":0.556,"temp":null}},"sio":{"w":{"st":"Szekszárd (Palánk)","level":237,"chg":-1,"q":null,"temp":25.6}}},"paks":{"st":"Paks","level":-138,"chg":-1,"q":725,"temp":27.9}};
+const LIVE = {"obs":"2026. augusztus 04.","fetched":"2026-08-04T16:25+02:00","fetched_hu":"2026. 08. 04. 16:25","source":"hydroinfo.hu (Országos Vízjelző Szolgálat)","rivers":{"duna":{"in":{"st":"Nagybajcs (Vámosszabadi)","level":-32,"chg":4,"q":650,"temp":24.8},"out":{"st":"Dunaszekcső (Mohács fölött)","level":-10,"chg":-4,"q":678,"temp":26.9}},"mosoni-duna":{"in":{"st":"Rajka, 6. zsilip","level":1397,"chg":0,"q":24.7,"temp":null}},"lajta":{"in":{"st":"Hegyeshalom","level":-8,"chg":-2,"q":null,"temp":25.1}},"raba":{"in":{"st":"Szentgotthárd","level":-118,"chg":-2,"q":4.44,"temp":19.8}},"pinka":{"in":{"st":"Felsőcsatár","level":30,"chg":0,"q":0.07,"temp":null}},"repce":{"in":{"st":"Répcevis","level":-6,"chg":1,"q":0.2,"temp":null}},"mura":{"in":{"st":"Letenye","level":92,"chg":0,"q":57.0,"temp":25.9}},"drava":{"in":{"st":"Őrtilos","level":-120,"chg":7,"q":215,"temp":25.9},"out":{"st":"Drávaszabolcs","level":-38,"chg":15,"q":209,"temp":26.8}},"ipoly":{"in":{"st":"Ipolytarnóc","level":30,"chg":1,"q":0.319,"temp":22.6}},"sajo":{"in":{"st":"Sajópüspöki","level":18,"chg":2,"q":2.89,"temp":23.3}},"bodva":{"in":{"st":"Hidvégardó","level":-33,"chg":-1,"q":0.276,"temp":19.8}},"hernad":{"in":{"st":"Hidasnémeti","level":-111,"chg":3,"q":9.51,"temp":null}},"bodrog":{"in":{"st":"Felsőberecki","level":174,"chg":-6,"q":12.1,"temp":25.7}},"tisza":{"in":{"st":"Tiszabecs","level":-238,"chg":0,"q":34.4,"temp":25.6},"out":{"st":"Szeged","level":60,"chg":0,"q":125,"temp":26.4}},"tur":{"in":{"st":"Garbolc","level":-99,"chg":-2,"q":0.771,"temp":24.3}},"szamos":{"in":{"st":"Csenger","level":-149,"chg":-1,"q":20.1,"temp":26.8}},"kraszna":{"in":{"st":"Ágerdőmajor","level":121,"chg":-4,"q":0.349,"temp":25.0}},"berettyo":{"in":{"st":"Pocsaj","level":-51,"chg":-2,"q":0.466,"temp":21.9}},"sebes-koros":{"in":{"st":"Körösszakál","level":-196,"chg":3,"q":0.961,"temp":25.2}},"fekete-koros":{"in":{"st":"Sarkad","level":117,"chg":-1,"q":0.936,"temp":26.4}},"feher-koros":{"in":{"st":"Gyula","level":106,"chg":-1,"q":0.0,"temp":24.0}},"maros":{"in":{"st":"Nagylak","level":-60,"chg":-12,"q":53.0,"temp":27.6}},"kettos-koros":{"w":{"st":"Doboz","level":365,"chg":0,"q":null,"temp":24.3}},"harmas-koros":{"w":{"st":"Kunszentmárton","level":-186,"chg":-1,"q":5.58,"temp":null}},"zagyva":{"w":{"st":"Jásztelek","level":107,"chg":-3,"q":null,"temp":26.0}},"zala":{"w":{"st":"Zalaapáti","level":90,"chg":0,"q":0.556,"temp":null}},"sio":{"w":{"st":"Szekszárd (Palánk)","level":237,"chg":-1,"q":null,"temp":25.6}}},"paks":{"st":"Paks","level":-138,"chg":-1,"q":725,"temp":27.9}};
 for(const r of RIVERS) r.live = LIVE.rivers[r.id] || {};
 const liveIn  = r => r.live.in  && r.live.in.q  != null ? r.live.in.q  : null;
 const liveOut = r => r.live.out && r.live.out.q != null ? r.live.out.q : null;
@@ -370,8 +337,8 @@ for(const r of RIVERS){
   if(r.dir==='both' && r.grad){
     const [x1,y1,x2,y2]=r.grad;
     const lg = el('linearGradient',{id:'g-'+r.id,x1,y1,x2,y2});
-    lg.appendChild(el('stop',{offset:'0%','stop-color':'#3DDCC8'}));
-    lg.appendChild(el('stop',{offset:'100%','stop-color':'#FF9B3D'}));
+    lg.appendChild(el('stop',{offset:'0%','stop-color':'#3987E5'}));
+    lg.appendChild(el('stop',{offset:'100%','stop-color':'#E66767'}));
     defs.appendChild(lg);
   }
 }
@@ -605,22 +572,10 @@ sumTr.innerHTML=`<td>Összesen</td><td></td><td></td><td></td>
   <td class="q muted">${fmt(QIN)} → ${fmt(QOUT)}</td><td></td>`;
 tb.appendChild(sumTr);
 
-/* ---- óra + hullám ---- */
+/* ---- óra ---- */
 const tick = () => document.getElementById('clock').textContent =
   new Date().toLocaleTimeString('hu-HU',{hour12:false});
 tick(); setInterval(tick,1000);
-(function(){
-  const p = document.getElementById('wavepath');
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let t=0;
-  setInterval(()=>{
-    t+=.05;
-    let d=`M0,13`;
-    for(let x=0;x<=600;x+=12){
-      const y=13+Math.sin(x/38+t)*5*Math.sin(x/143+t/3);
-      d+=` L${x},${y.toFixed(1)}`;
-    }
-    p.setAttribute('d',d);
-  },80);
-})();
 </script>
+</body>
+</html>
