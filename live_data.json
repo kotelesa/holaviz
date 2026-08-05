@@ -1,7 +1,8 @@
 {
  "obs": "2026. augusztus 05.",
- "fetched": "2026-08-05T09:41+02:00",
- "fetched_hu": "2026. 08. 05. 09:41",
+ "obs_iso": "2026-08-05",
+ "fetched": "2026-08-05T11:07+02:00",
+ "fetched_hu": "2026. 08. 05. 11:07",
  "source": "hydroinfo.hu (Országos Vízjelző Szolgálat)",
  "rivers": {
   "duna": {

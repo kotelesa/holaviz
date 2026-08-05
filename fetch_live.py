@@ -105,6 +105,16 @@ def main():
                   html.unescape(get(BASE + HEADER)))
     obs = m.group(1).strip() if m else None
 
+    # ISO dátum az angol megjelenítéshez ("2026. augusztus 05." -> "2026-08-05")
+    MONTHS = {'január': 1, 'február': 2, 'március': 3, 'április': 4, 'május': 5,
+              'június': 6, 'július': 7, 'augusztus': 8, 'szeptember': 9,
+              'október': 10, 'november': 11, 'december': 12}
+    obs_iso = None
+    if obs:
+        dm = re.match(r'(\d{4})\.\s*(\S+)\s*(\d{1,2})\.', obs)
+        if dm and dm.group(2).lower() in MONTHS:
+            obs_iso = f'{dm.group(1)}-{MONTHS[dm.group(2).lower()]:02d}-{int(dm.group(3)):02d}'
+
     def rec(spec):
         river, station, lab = spec
         d = rows.get((river, station))
@@ -129,6 +139,7 @@ def main():
     now = datetime.now(ZoneInfo('Europe/Budapest'))
     out = {
         'obs': obs,
+        'obs_iso': obs_iso,
         'fetched': now.isoformat(timespec='minutes'),
         'fetched_hu': now.strftime('%Y. %m. %d. %H:%M'),
         'source': 'hydroinfo.hu (Országos Vízjelző Szolgálat)',

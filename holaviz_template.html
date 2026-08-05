@@ -49,6 +49,15 @@ body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none
 .pill b{width:6px;height:6px;border-radius:50%;background:var(--in);flex:none}
 .pill.warn{border-color:rgba(230,103,103,.6);color:var(--out)}
 .pill.warn b{background:var(--out)}
+/* nyelvválasztó */
+.lang{display:flex;align-self:flex-end;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#0F1D33}
+.lang button{display:flex;align-items:center;gap:6px;padding:4px 10px;background:none;border:0;
+  color:var(--ink-3);font:inherit;font-size:10px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:color .15s}
+.lang button svg{width:16px;height:8px;border-radius:1.5px;display:block;opacity:.55;transition:opacity .15s}
+.lang button.on{background:#1B2C46;color:var(--ink)}
+.lang button.on svg{opacity:1}
+.lang button:not(.on):hover{color:var(--ink-2)}
+.lang button:not(.on):hover svg{opacity:.8}
 
 .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
 
@@ -197,8 +206,8 @@ footer .src{margin-top:6px}
   <!-- fejléc -->
   <div class="rail">
     <div class="brand">
-      <h1>HOL&nbsp;A&nbsp;VÍZ<span class="q">?</span></h1>
-      <div class="sub">Magyarország folyóvíz-forgalma · élő belépő és kilépő vízhozamok</div>
+      <h1 id="brandh">HOL&nbsp;A&nbsp;VÍZ<span class="q">?</span></h1>
+      <div class="sub" data-i18n="sub">Magyarország folyóvíz-forgalma · élő belépő és kilépő vízhozamok</div>
     </div>
     <div class="ecg">
       <div class="cap">
@@ -207,9 +216,13 @@ footer .src{margin-top:6px}
       </div>
     </div>
     <div class="clock">
+      <div class="lang" id="langsw" role="group" aria-label="Nyelv / Language">
+        <button type="button" data-lang="hu" aria-label="magyar"><svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="10" fill="#CD2A3E"/><rect y="10" width="60" height="10" fill="#F5F7F8"/><rect y="20" width="60" height="10" fill="#436F4D"/></svg>HU</button>
+        <button type="button" data-lang="en" aria-label="English"><svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 60,30 M60,0 0,30" stroke="#C8102E" stroke-width="3.5"/><path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V30 M0,15 H60" stroke="#C8102E" stroke-width="6"/></svg>EN</button>
+      </div>
       <div class="t" id="clock">--:--:--</div>
       <div class="pills">
-        <span class="pill"><b></b>élő adat · <span id="obsdate">—</span></span>
+        <span class="pill" id="livepill"><b></b>—</span>
         <span class="pill" id="regimepill"><b></b>—</span>
       </div>
     </div>
@@ -217,14 +230,14 @@ footer .src{margin-top:6px}
 
   <!-- térkép -->
   <div class="card map mapwrap">
-    <div class="hint" id="hint">Vidd az egeret egy folyóra, tóra vagy nyílra</div>
+    <div class="hint" id="hint" data-i18n="hint">Vidd az egeret egy folyóra, tóra vagy nyílra</div>
     <div id="mapbox" style="position:relative"></div>
     <div class="maptip" id="tip"></div>
     <div class="legend">
-      <div><s style="border-color:var(--in)"></s>belépő víz</div>
-      <div><s style="border-color:var(--out)"></s>kilépő víz</div>
-      <div><s style="border-color:#31485A"></s>hazai vízfolyás</div>
-      <div><s style="border-color:#24455A;border-top-width:5px"></s>állóvíz</div>
+      <div><s style="border-color:var(--in)"></s><span data-i18n="lgIn">belépő víz</span></div>
+      <div><s style="border-color:var(--out)"></s><span data-i18n="lgOut">kilépő víz</span></div>
+      <div><s style="border-color:#31485A"></s><span data-i18n="lgDom">hazai vízfolyás</span></div>
+      <div><s style="border-color:#24455A;border-top-width:5px"></s><span data-i18n="lgLake">állóvíz</span></div>
     </div>
     <div class="flowlist" id="flowlist"></div>
   </div>
@@ -235,8 +248,8 @@ footer .src{margin-top:6px}
   <!-- mérleg -->
   <div class="card balance">
     <div class="ends">
-      <span class="lbl">külföldről belépő víz</span>
-      <span class="lbl">összes kilépő víz</span>
+      <span class="lbl" data-i18n="endsIn">külföldről belépő víz</span>
+      <span class="lbl" data-i18n="endsOut">összes kilépő víz</span>
     </div>
     <div class="bar" id="balbar"></div>
     <div class="cap2" id="balcap"></div>
@@ -244,43 +257,27 @@ footer .src{margin-top:6px}
 
   <!-- perspektíva -->
   <div class="card persp">
-    <h2>Mennyi ez valójában?</h2>
-    <div class="lbl">a belépő <span id="perspin">—</span> m³/s köznapi mértékegységekben</div>
+    <h2 data-i18n="perspH">Mennyi ez valójában?</h2>
+    <div class="lbl" id="persplbl">—</div>
     <div class="items" id="persp"></div>
   </div>
 
   <!-- részletes tábla -->
   <div class="card detail">
-    <h2>Folyóról folyóra</h2>
-    <div class="lbl">minden határt átlépő vízfolyás · élő reggeli hozam (<span id="tblobs">ma</span>) és sokéves közép (KÖQ, 1981–2010)</div>
+    <h2 data-i18n="detailH">Folyóról folyóra</h2>
+    <div class="lbl" id="detlbl">—</div>
     <div class="scroll">
       <table id="rtable">
-        <thead><tr>
-          <th>Vízfolyás</th><th>Irány</th><th>Határszelvény / mérce</th><th>Honnan / hová</th>
-          <th class="q">Élő&nbsp;(m³/s)</th><th class="q">KÖQ&nbsp;(m³/s)</th><th>Torkolat</th>
-        </tr></thead>
+        <thead><tr id="thead"></tr></thead>
         <tbody></tbody>
       </table>
     </div>
   </div>
 
   <footer>
-    <div>Az elsődleges számok <b>élő adatok</b>: az Országos Vízjelző Szolgálat napi hidrológiai táblájának
-    reggeli észlelései (<b id="ftobs">—</b>, lekérdezve: <span id="ftfetch">—</span>) a
-    <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>-ról. Viszonyításul mindenütt szerepel a
-    <b>sokéves középvízhozam (KÖQ, 1981–2010)</b> a VGT3 határszelvény-táblázata alapján. Az oldal
-    újrapublikáláskor frissül — a „lekérdezve" időpont mutatja, mennyire friss, amit látsz.</div>
-    <div style="margin-top:6px">Mérce-megjegyzések: a Duna belépő élő hozama a <b>nagybajcsi</b> mércén mért
-    (a bősi üzemvízcsatorna visszatorkollása alatt, Vámosszabadinál); kilépő hozama a <b>dunaszekcsői</b> mércéről
-    származik, mert Mohács vízhozamot nem közöl. A Dráva belépő hozama élőben közvetlenül Őrtilosnál mért érték
-    (a KÖQ-nél még számított: Botovo mínusz Mura). A Lajta, a Kerka és a Ronyva nem közöl élő hozamot — ott a KÖQ
-    szerepel, és az élő összegekben nem számítjuk őket. Néhány kis határátlépő vízfolyásról (Ikva, Gyöngyös,
-    Lendva, Karasica) nincs hivatalos adat, ezek a listában nem szerepelnek.</div>
-    <div class="src">Adatforrások: élő adatok — <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>
-    (OVSZ, napi hidrológiai adatok); sokéves közép — Országos Vízügyi Főigazgatóság
-    (<a href="https://www.vizugy.hu" rel="noopener">vizugy.hu</a>, VGT3), Wikipédia. ·
-    Látogatottságmérés: Cloudflare Web Analytics — süti és személyes adat nélkül. ·
-    Nem hivatalos, ismeretterjesztő oldal.</div>
+    <div id="ftp1"></div>
+    <div id="ftp2" style="margin-top:6px"></div>
+    <div class="src" id="ftsrc"></div>
   </footer>
 </div>
 
@@ -297,9 +294,99 @@ for(const r of RIVERS) r.live = LIVE.rivers[r.id] || {};
 const liveIn  = r => r.live.in  && r.live.in.q  != null ? r.live.in.q  : null;
 const liveOut = r => r.live.out && r.live.out.q != null ? r.live.out.q : null;
 
-const fmt = n => n.toLocaleString('hu-HU', {maximumFractionDigits: Math.abs(n) < 1 ? 2 : Math.abs(n) < 10 ? 1 : 0});
-const fmt1 = n => n.toLocaleString('hu-HU', {minimumFractionDigits:1, maximumFractionDigits:1});
+/* ---- kétnyelvűség (HU/EN) ---- */
+let LANG = 'hu';
+try{ if(localStorage.getItem('holaviz-lang')==='en') LANG='en'; }catch(e){}
+const hu = () => LANG==='hu';
+const LOC = () => hu() ? 'hu-HU' : 'en-GB';
+const fmt = n => n.toLocaleString(LOC(), {maximumFractionDigits: Math.abs(n) < 1 ? 2 : Math.abs(n) < 10 ? 1 : 0});
+const fmt1 = n => n.toLocaleString(LOC(), {minimumFractionDigits:1, maximumFractionDigits:1});
 const sgn = n => n==null ? '—' : (n>0?'+':'')+fmt(n);
+/* mérce-feliratok angol változata (ahol kell) */
+const ST_EN = {
+  'Dunaszekcső (Mohács fölött)':'Dunaszekcső (above Mohács)',
+  'Rajka, 6. zsilip':'Rajka, lock 6',
+  'Őrtilos (számított)':'Őrtilos (computed)',
+  'Balaton (átlag)':'Balaton (average)',
+  'Kisköre-felső (duzzasztott tér)':'Kisköre upper (impounded reach)',
+};
+const stX = s => s==null ? s : (hu() ? s : (ST_EN[s]||s));
+/* folyónkénti angol szövegek — ami nincs itt, marad az eredeti */
+const TRE = {
+ duna:{fromTo:'arrives from Austria–Slovakia, leaves towards Croatia–Serbia',mouth:'Black Sea',note:'Since the Gabčíkovo dam, part of the flow arrives via a Slovak headrace canal, rejoining the main bed by Vámosszabadi. The Mosoni-Duna branch is shown separately.'},
+ 'mosoni-duna':{fromTo:'a side branch of the Danube, fed from the Čunovo reservoir',note:'Not an independent river: a Danube branch along southern Szigetköz, receiving its water through a lock.'},
+ lajta:{fromTo:'arrives from Austria',note:'By its mouth (Mosonmagyaróvár) its mean flow is already ~9.6 m³/s.'},
+ raba:{fromTo:'arrives from Austria',note:'The Szentgotthárd figure includes the Lapincs (Lafnitz), joining right at the border. At Győr it is already ~27 m³/s.'},
+ pinka:{fromTo:'arrives from Austria, crossing the border several times',mouth:'Rába (below Körmend)'},
+ repce:{fromTo:'arrives from Austria',mouth:'joins the Mosoni-Duna as the Rábca (Győr)',note:'Its lower reach runs under the name Rábca, picking up the Ikva on the way.'},
+ kerka:{fromTo:'arrives from Slovenia'},
+ mura:{fromTo:'from Slovenia–Croatia, as a border river',mouth:'Dráva (Legrád, on the border)',note:'It joins the Dráva exactly on the border, at Őrtilos — its water leaves the country together with the Dráva.'},
+ drava:{fromTo:'arrives from Croatia as a border river, then leaves for Croatia',mouth:'Duna (Aljmaš, HR)',note:'The official inflow figure (473 m³/s at Botovo) includes the Mura — a computed value without the Mura (169) is shown here to avoid double counting.'},
+ ipoly:{fromTo:'arrives from Slovakia, a border river for 143 km',note:'Still small at the border section, but ~22 m³/s by its mouth at Szob — growing from both sides of the border along the way.'},
+ sajo:{fromTo:'arrives from Slovakia'},
+ bodva:{fromTo:'arrives from Slovakia'},
+ hernad:{fromTo:'arrives from Slovakia'},
+ bodrog:{fromTo:'arrives from Slovakia (formed by the Latorca and the Ondava)'},
+ tisza:{fromTo:'arrives from Ukraine, leaves towards Serbia',note:'After entering, it runs along the Ukrainian border with the Záhony bend, then south across the Great Plain. On exit it carries four times the water it arrived with.'},
+ ronyva:{fromTo:'arrives from Slovakia, partly a border stream',note:'An estimate-like mean value; not drawn separately on the map.'},
+ tur:{fromTo:'arrives from Romania'},
+ szamos:{fromTo:'arrives from Romania'},
+ kraszna:{fromTo:'arrives from Romania'},
+ berettyo:{fromTo:'arrives from Romania'},
+ 'sebes-koros':{fromTo:'arrives from Romania'},
+ 'fekete-koros':{fromTo:'arrives from Romania'},
+ 'feher-koros':{fromTo:'arrives from Romania'},
+ maros:{fromTo:'arrives from Romania'},
+ 'kettos-koros':{note:'Confluence of the Fehér- and Fekete-Körös at Szanazug — a domestic reach.',qnote:'~60 m³/s'},
+ 'harmas-koros':{note:'Confluence of the Kettős- and Sebes-Körös — joins the Tisza at Csongrád.',qnote:'~105 m³/s'},
+ zagyva:{note:'A fully domestic river: from the Mátra hills to Szolnok, where it joins the Tisza.',qnote:'~4 m³/s'},
+ zala:{note:'Domestic river, Lake Balaton’s largest feeder (mouth at Keszthely).',qnote:'~6 m³/s'},
+ sio:{note:'Lake Balaton’s regulated outlet channel from Siófok to the Danube — its flow depends on the sluice.',qnote:'depends on sluice'},
+ szinva:{note:'A stream fed by the Bükk’s karst springs: at Lillafüred it drops over the ~20 m Szinva waterfall — the country’s tallest permanent waterfall — then crosses downtown Miskolc to join the Sajó. Highly variable regime, its upper reach can run dry in drought; no official live gauge.',qnote:'~0.3 m³/s · no live gauge'},
+};
+const rT = (r,f) => hu() ? r[f] : ((TRE[r.id]||{})[f] ?? r[f]);
+const obsTxt = () => hu() ? (LIVE.obs||'—')
+  : (LIVE.obs_iso ? new Date(LIVE.obs_iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : (LIVE.obs||'—'));
+const fetchedTxt = () => hu() ? (LIVE.fetched_hu||'—')
+  : (LIVE.fetched ? new Date(LIVE.fetched).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—');
+/* felület-szótár */
+const T = {
+ hu:{
+  title:'Hol a víz? — Magyarország folyóvíz-forgalma',
+  brand:'HOL&nbsp;A&nbsp;VÍZ<span class="q">?</span>',
+  sub:'Magyarország folyóvíz-forgalma · élő belépő és kilépő vízhozamok',
+  hint:'Vidd az egeret egy folyóra, tóra vagy nyílra',
+  lgIn:'belépő víz',lgOut:'kilépő víz',lgDom:'hazai vízfolyás',lgLake:'állóvíz',
+  endsIn:'külföldről belépő víz',endsOut:'összes kilépő víz',
+  perspH:'Mennyi ez valójában?',detailH:'Folyóról folyóra',
+  avgPfx:'KÖQ ',liveData:'élő adat',
+  paksLbl:'PAKS · DUNA VÍZÁLLÁS',
+  enters:'belép',leaves:'kilép',ltm:'sokéves közép (KÖQ)',stage24:'vízállás · 24 h',
+  liveNA:'élő: n. a.',domRow:'hazai vízfolyás',liveFlow:'élő hozam',
+  stage:'vízállás',chg24:'változás 24 óra alatt',wtemp:'vízhőmérséklet',flow:'vízhozam',
+  morning:'Reggeli észlelés',stageMorning:'vízállás (ma reggel)',
+  paksNote:'paksi mérce (1531,3 fkm)',
+  lakeNames:{balaton:'Balaton','tisza-to':'Tisza-tó',ferto:'Fertő',velencei:'Velencei-tó'},
+ },
+ en:{
+  title:'Where’s the Water? — Hungary’s river traffic, live',
+  brand:'WHERE’S&nbsp;THE&nbsp;WATER<span class="q">?</span>',
+  sub:'Hungary’s river water traffic · live inflows and outflows',
+  hint:'Hover over a river, a lake or an arrow',
+  lgIn:'water flowing in',lgOut:'water flowing out',lgDom:'domestic stream',lgLake:'lake',
+  endsIn:'water entering from abroad',endsOut:'total water leaving',
+  perspH:'How much is that, really?',detailH:'River by river',
+  avgPfx:'avg ',liveData:'live data',
+  paksLbl:'PAKS · DANUBE STAGE',
+  enters:'in',leaves:'out',ltm:'long-term mean (KÖQ)',stage24:'stage · 24 h',
+  liveNA:'live: n/a',domRow:'domestic stream',liveFlow:'live flow',
+  stage:'stage',chg24:'24-hour change',wtemp:'water temperature',flow:'flow',
+  morning:'Morning reading',stageMorning:'stage (this morning)',
+  paksNote:'Paks gauge (river-km 1531.3)',
+  lakeNames:{balaton:'Lake Balaton','tisza-to':'Lake Tisza',ferto:'Lake Fertő',velencei:'Lake Velence'},
+ },
+};
+const tr = k => T[LANG][k];
 const QIN  = RIVERS.filter(r=>r.qin!=null).reduce((s,r)=>s+r.qin,0);
 const QOUT = RIVERS.filter(r=>r.qout!=null).reduce((s,r)=>s+r.qout,0);
 const QDOM = QOUT - QIN;
@@ -320,28 +407,30 @@ document.getElementById('mapbox').appendChild(svg);
 
 svg.appendChild(el('path',{id:'hun',d:GEO.border}));
 
-/* szomszédok */
-const COUNTRIES = [['AUSZTRIA',95,205,-52],['SZLOVÁKIA',520,66,0],['UKRAJNA',1012,120,0],
-  ['ROMÁNIA',985,560,0],['SZERBIA',600,672,0],['HORVÁTORSZÁG',300,640,-8],['SZLOVÉNIA',52,472,-72]];
-for(const [n,x,y,rot] of COUNTRIES){
+/* szomszédok — kétnyelvű felirattal */
+const COUNTRIES = [['AUSZTRIA','AUSTRIA',95,205,-52],['SZLOVÁKIA','SLOVAKIA',520,66,0],
+  ['UKRAJNA','UKRAINE',1012,120,0],['ROMÁNIA','ROMANIA',985,560,0],['SZERBIA','SERBIA',600,672,0],
+  ['HORVÁTORSZÁG','CROATIA',300,640,-8],['SZLOVÉNIA','SLOVENIA',52,472,-72]];
+const countryEls = [];
+for(const [nh,ne,x,y,rot] of COUNTRIES){
   const t=el('text',{x,y,class:'country','text-anchor':'middle',
     transform:rot?`rotate(${rot} ${x} ${y})`:''});
-  t.textContent=n; svg.appendChild(t);
+  t.textContent=nh; svg.appendChild(t); countryEls.push({t,nh,ne});
 }
 
 /* tavak — élő vízszint a tooltipben */
-const LAKE_NAMES = {balaton:'Balaton', 'tisza-to':'Tisza-tó', ferto:'Fertő', velencei:'Velencei-tó'};
+let pmarkLbl = null;
 for(const [lid,d] of Object.entries(GEO.lakes)){
   const p = el('path',{d,class:'lake'});
   const L = (LIVE.lakes||{})[lid];
   if(L && L.level!=null){
     p.classList.add('has');
     p.addEventListener('pointerenter',e=>{
-      tip.innerHTML = `<h4 style="color:#7FB8E8">${LAKE_NAMES[lid]||lid}</h4>
-        <div class="row"><span>vízállás · ${L.st}</span><b>${L.level} cm</b></div>
-        <div class="row"><span>változás 24 óra alatt</span><b>${sgn(L.chg)} cm</b></div>
-        ${L.temp!=null?`<div class="row"><span>vízhőmérséklet${L.tempst?' · '+L.tempst:''}</span><b>${fmt1(L.temp)} °C</b></div>`:''}
-        <div class="note">Reggeli észlelés: ${LIVE.obs||'—'} · hydroinfo.hu</div>`;
+      tip.innerHTML = `<h4 style="color:#7FB8E8">${tr('lakeNames')[lid]||lid}</h4>
+        <div class="row"><span>${tr('stage')} · ${stX(L.st)}</span><b>${L.level} cm</b></div>
+        <div class="row"><span>${tr('chg24')}</span><b>${sgn(L.chg)} cm</b></div>
+        ${L.temp!=null?`<div class="row"><span>${tr('wtemp')}${L.tempst?' · '+L.tempst:''}</span><b>${fmt1(L.temp)} °C</b></div>`:''}
+        <div class="note">${tr('morning')}: ${obsTxt()} · hydroinfo.hu</div>`;
       tip.classList.add('on'); hint.style.opacity=0; moveTip(e);
     });
     p.addEventListener('pointermove',moveTip);
@@ -399,9 +488,14 @@ function arrow(host, pt, angDeg, kind, name, qLive, qRef, lab){
   const anchor = lab[2]||'start';
   const t1=el('text',{x:tx,y:ty,class:'rn','text-anchor':anchor}); t1.textContent=name;
   const t2=el('text',{x:tx,y:ty+13,class:'rv'+(qLive==null?' koq':''),'text-anchor':anchor});
-  t2.textContent = qLive!=null ? fmt(qLive)+' m³/s' : 'KÖQ '+fmt(qRef)+' m³/s';
+  arrowTexts.push({t2,qLive,qRef});
   g.appendChild(t1); g.appendChild(t2);
   host.appendChild(g);
+}
+const arrowTexts = [];
+function setArrowTexts(){
+  for(const a of arrowTexts)
+    a.t2.textContent = a.qLive!=null ? fmt(a.qLive)+' m³/s' : tr('avgPfx')+fmt(a.qRef)+' m³/s';
 }
 for(const r of RIVERS){
   const g = GEO.rivers[r.id]; if(!g||!groups[r.id]) continue;
@@ -417,15 +511,17 @@ if(GEO.markers && GEO.markers.paks && LIVE.paks && LIVE.paks.level!=null){
   g.appendChild(el('circle',{cx:px,cy:py,r:3.2,class:'dot'}));
   const t1=el('text',{x:px+15,y:py+1,class:'pn'}); t1.textContent='PAKS · DUNA VÍZÁLLÁS';
   const t2=el('text',{x:px+15,y:py+15,class:'pv'}); t2.textContent=PK.level+' cm';
+  pmarkLbl = t1;
   g.appendChild(t1); g.appendChild(t2);
   svg.appendChild(g);
   g.addEventListener('pointerenter',e=>{
-    tip.innerHTML = `<h4 style="color:var(--hl)">Duna — Paks</h4>
-      <div class="row"><span>vízállás (ma reggel)</span><b style="color:var(--hl)">${PK.level} cm</b></div>
-      <div class="row"><span>változás 24 óra alatt</span><b>${sgn(PK.chg)} cm</b></div>
-      <div class="row"><span>vízhozam</span><b>${PK.q!=null?fmt(PK.q)+' m³/s':'n. a.'}</b></div>
-      <div class="row"><span>vízhőmérséklet</span><b>${PK.temp!=null?fmt1(PK.temp)+' °C':'n. a.'}</b></div>
-      <div class="note">Reggeli észlelés: ${LIVE.obs||'—'} · paksi mérce (1531,3 fkm) · hydroinfo.hu</div>`;
+    const na = hu()?'n. a.':'n/a';
+    tip.innerHTML = `<h4 style="color:var(--hl)">${hu()?'Duna — Paks':'Danube — Paks'}</h4>
+      <div class="row"><span>${tr('stageMorning')}</span><b style="color:var(--hl)">${PK.level} cm</b></div>
+      <div class="row"><span>${tr('chg24')}</span><b>${sgn(PK.chg)} cm</b></div>
+      <div class="row"><span>${tr('flow')}</span><b>${PK.q!=null?fmt(PK.q)+' m³/s':na}</b></div>
+      <div class="row"><span>${tr('wtemp')}</span><b>${PK.temp!=null?fmt1(PK.temp)+' °C':na}</b></div>
+      <div class="note">${tr('morning')}: ${obsTxt()} · ${tr('paksNote')} · hydroinfo.hu</div>`;
     tip.classList.add('on'); hint.style.opacity=0; moveTip(e);
   });
   g.addEventListener('pointermove',moveTip);
@@ -443,24 +539,24 @@ const tip = document.getElementById('tip');
 const hint = document.getElementById('hint');
 const byId = Object.fromEntries(RIVERS.map(r=>[r.id,r]));
 function tipRows(kind, at, L, koq){
-  const color = kind==='belép' ? 'var(--in)' : 'var(--out)';
-  let h = `<div class="row"><span>${kind} · ${L&&L.st?L.st:at}</span>
-    <b style="color:${color}">${L&&L.q!=null?fmt(L.q)+' m³/s':'élő: n. a.'}</b></div>`;
-  h += `<div class="row"><span>sokéves közép (KÖQ)</span><b class="muted">${fmt(koq)} m³/s</b></div>`;
-  if(L&&L.level!=null) h += `<div class="row"><span>vízállás · 24 h</span><b>${L.level} cm · ${sgn(L.chg)}</b></div>`;
+  const color = kind==='in' ? 'var(--in)' : 'var(--out)';
+  let h = `<div class="row"><span>${kind==='in'?tr('enters'):tr('leaves')} · ${stX(L&&L.st?L.st:at)}</span>
+    <b style="color:${color}">${L&&L.q!=null?fmt(L.q)+' m³/s':tr('liveNA')}</b></div>`;
+  h += `<div class="row"><span>${tr('ltm')}</span><b class="muted">${fmt(koq)} m³/s</b></div>`;
+  if(L&&L.level!=null) h += `<div class="row"><span>${tr('stage24')}</span><b>${L.level} cm · ${sgn(L.chg)}</b></div>`;
   return h;
 }
 function showTip(r, evt){
   let html = `<h4 style="color:${r.dir==='out'?'var(--out)':r.dir==='dom'?'var(--ink-2)':'var(--in)'}">${r.name}</h4>`;
-  if(r.qin!=null)  html+=tipRows('belép', r.inAt, r.live.in, r.qin);
-  if(r.qout!=null) html+=tipRows('kilép', r.outAt, r.live.out, r.qout);
+  if(r.qin!=null)  html+=tipRows('in', r.inAt, r.live.in, r.qin);
+  if(r.qout!=null) html+=tipRows('out', r.outAt, r.live.out, r.qout);
   if(r.dir==='dom'){
-    html+=`<div class="row"><span>hazai vízfolyás</span><b>${r.qnote||''}</b></div>`;
+    html+=`<div class="row"><span>${tr('domRow')}</span><b>${rT(r,'qnote')||''}</b></div>`;
     const W = r.live.w;
-    if(W&&W.q!=null) html+=`<div class="row"><span>élő hozam · ${W.st}</span><b>${fmt(W.q)} m³/s</b></div>`;
-    else if(W&&W.level!=null) html+=`<div class="row"><span>vízállás · ${W.st}</span><b>${W.level} cm · ${sgn(W.chg)}</b></div>`;
+    if(W&&W.q!=null) html+=`<div class="row"><span>${tr('liveFlow')} · ${stX(W.st)}</span><b>${fmt(W.q)} m³/s</b></div>`;
+    else if(W&&W.level!=null) html+=`<div class="row"><span>${tr('stage')} · ${stX(W.st)}</span><b>${W.level} cm · ${sgn(W.chg)}</b></div>`;
   }
-  if(r.note) html+=`<div class="note">${r.note}</div>`;
+  if(rT(r,'note')) html+=`<div class="note">${rT(r,'note')}</div>`;
   tip.innerHTML = html; tip.classList.add('on'); hint.style.opacity=0;
   moveTip(evt);
 }
@@ -490,110 +586,222 @@ for(const r of RIVERS){
   if(r.qout!=null) crossings.push({r,dir:'out',q:liveOut(r),koq:r.qout,at:(r.live.out&&r.live.out.st)||r.outAt});
 }
 crossings.sort((a,b)=>(b.q??b.koq)-(a.q??a.koq));
-for(const c of crossings){
-  const d=document.createElement('div');
-  d.innerHTML=`<span>${c.dir==='in'?'▸':'◂'} ${c.r.name} · ${c.at}</span>
-    <b class="${c.q==null?'k':c.dir==='in'?'i':'o'}">${c.q!=null?fmt(c.q):'KÖQ '+fmt(c.koq)}<i>m³/s</i></b>`;
-  d.addEventListener('pointerenter',e=>{hot(c.r.id);showTip(c.r,e);tip.classList.remove('on');});
-  d.addEventListener('pointerleave',hideTip);
-  fl.appendChild(d);
+function renderFlowlist(){
+  fl.innerHTML='';
+  for(const c of crossings){
+    const d=document.createElement('div');
+    d.innerHTML=`<span>${c.dir==='in'?'▸':'◂'} ${c.r.name} · ${stX(c.at)}</span>
+      <b class="${c.q==null?'k':c.dir==='in'?'i':'o'}">${c.q!=null?fmt(c.q):tr('avgPfx')+fmt(c.koq)}<i>m³/s</i></b>`;
+    d.addEventListener('pointerenter',e=>{hot(c.r.id);showTip(c.r,e);tip.classList.remove('on');});
+    d.addEventListener('pointerleave',hideTip);
+    fl.appendChild(d);
+  }
 }
 
 /* ---- fejléc-számok, státusz ---- */
-document.getElementById('hdrin').textContent = fmt(QINL);
-document.getElementById('hdrout').textContent = fmt(QOUTL);
-document.getElementById('perspin').textContent = fmt(QINL);
-document.getElementById('hdrsub').textContent =
-  `élő reggeli hozamok · sokéves közép: be ${fmt(QIN)} · ki ${fmt(QOUT)} m³/s`;
-document.getElementById('obsdate').textContent = LIVE.obs || LIVE.fetched_hu || '—';
-document.getElementById('ftobs').textContent = LIVE.obs || '—';
-document.getElementById('ftfetch').textContent = LIVE.fetched_hu || '—';
-(function(){
+function renderHeader(){
+  document.querySelector('.ecg .big').innerHTML = hu()
+    ? `be <i>${fmt(QINL)}</i> · ki <em>${fmt(QOUTL)}</em> m³/s`
+    : `in <i>${fmt(QINL)}</i> · out <em>${fmt(QOUTL)}</em> m³/s`;
+  document.getElementById('hdrsub').textContent = hu()
+    ? `élő reggeli hozamok · sokéves közép: be ${fmt(QIN)} · ki ${fmt(QOUT)} m³/s`
+    : `live morning flows · long-term mean: in ${fmt(QIN)} · out ${fmt(QOUT)} m³/s`;
+  document.getElementById('livepill').innerHTML = `<b></b>${tr('liveData')} · ${obsTxt()}`;
   const p = document.getElementById('regimepill');
   const pct = Math.round(QINL/QIN*100);
-  if(pct < 50 || pct > 150) p.classList.add('warn');
-  p.innerHTML = '<b></b>' + (pct<50 ? `kisvíz — a belépő a KÖQ ${pct}%-a`
-    : pct>150 ? `bő víz — a belépő a KÖQ ${pct}%-a` : `a belépő a KÖQ ${pct}%-a`);
-})();
+  p.classList.toggle('warn', pct<50 || pct>150);
+  p.innerHTML = '<b></b>' + (hu()
+    ? (pct<50 ? `kisvíz — a belépő a KÖQ ${pct}%-a` : pct>150 ? `bő víz — a belépő a KÖQ ${pct}%-a` : `a belépő a KÖQ ${pct}%-a`)
+    : (pct<50 ? `low water — inflow at ${pct}% of the mean` : pct>150 ? `high water — inflow at ${pct}% of the mean` : `inflow at ${pct}% of the long-term mean`));
+}
 
 /* ---- KPI kártyák ---- */
 const duna = byId['duna'];
 const PK = LIVE.paks || {};
 const dunaL = liveIn(duna);
-const KPIS = [
- {cls:'tin', lbl:'Ennyi víz lép be most az országba', v:fmt(QINL), u:'m³/s',
-  note:`${NINL} mért határszelvény reggeli hozama · a sokéves közép (${fmt(QIN)} m³/s) ${Math.round(QINL/QIN*100)}%-a`,
-  share:Math.min(1,QINL/QIN), col:'var(--in)'},
- {cls:'tout', lbl:'Ennyi víz lép ki most az országból', v:fmt(QOUTL), u:'m³/s',
-  note:`Duna (Dunaszekcső), Tisza (Szeged) és Dráva (Drávaszabolcs) mércéin · sokéves közép: ${fmt(QOUT)} m³/s`,
-  share:Math.min(1,QOUTL/QOUT), col:'var(--out)'},
- {cls:'thl', lbl:'A Duna vízállása Paksnál — most', v:PK.level!=null?String(PK.level):'n. a.', u:'cm',
-  note:PK.level!=null?`változás ${sgn(PK.chg)} cm/24 h · hozam ${PK.q!=null?fmt(PK.q):'n. a.'} m³/s · vízhő ${PK.temp!=null?fmt1(PK.temp):'n. a.'} °C · paksi mérce, 1531,3 fkm`:'a paksi mérce ma nem közölt adatot',
-  share:PK.q!=null?Math.min(1,PK.q/duna.qout):.05, col:'var(--hl)'},
- {cls:'thl', lbl:'Itthon most hozzáadott víz', v:sgn(QDOML), u:'m³/s',
-  note:QDOML>=0?`a kilépő és belépő élő hozam különbsége — hazai csapadék, kisvízfolyások, határ menti gyarapodás (sokéves közép: +${fmt(QDOM)})`
-    :`most kevesebb lép ki, mint be — párolgás, vízkivétel és a levonulási idő miatt kisvízkor előfordul (sokéves közép: +${fmt(QDOM)})`,
-  share:Math.min(1,Math.abs(QDOML)/QOUTL), col:'var(--hl)'},
- {cls:'tin', lbl:'A legbővizűbb belépő: a Duna', v:dunaL!=null?fmt(dunaL):fmt(duna.qin), u:'m³/s',
-  note:dunaL!=null?`Nagybajcsnál (Vámosszabadi) mérve — a sokéves közép (${fmt(duna.qin)} m³/s) ${Math.round(dunaL/duna.qin*100)}%-a`
-    :`Rajkánál lép be — önmagában a mért belépő hozam ${Math.round(duna.qin/QIN*100)}%-a`,
-  share:(dunaL??duna.qin)/QINL, col:'var(--in)'},
-];
-document.getElementById('kpis').innerHTML = KPIS.map(k=>`
-  <div class="card kpi ${k.cls}">
-    <div class="lbl">${k.lbl}</div>
-    <div class="v">${k.v}<span class="u">${k.u}</span></div>
-    <div class="note">${k.note}</div>
-    <div class="share"><i style="width:${Math.max(2,k.share*100)}%;background:${k.col}"></i></div>
-  </div>`).join('');
+function renderKpis(){
+  const na = hu()?'n. a.':'n/a';
+  const KPIS = hu() ? [
+   {cls:'tin', lbl:'Ennyi víz lép be most az országba', v:fmt(QINL), u:'m³/s',
+    note:`${NINL} mért határszelvény reggeli hozama · a sokéves közép (${fmt(QIN)} m³/s) ${Math.round(QINL/QIN*100)}%-a`,
+    share:Math.min(1,QINL/QIN), col:'var(--in)'},
+   {cls:'tout', lbl:'Ennyi víz lép ki most az országból', v:fmt(QOUTL), u:'m³/s',
+    note:`Duna (Dunaszekcső), Tisza (Szeged) és Dráva (Drávaszabolcs) mércéin · sokéves közép: ${fmt(QOUT)} m³/s`,
+    share:Math.min(1,QOUTL/QOUT), col:'var(--out)'},
+   {cls:'thl', lbl:'A Duna vízállása Paksnál — most', v:PK.level!=null?String(PK.level):na, u:'cm',
+    note:PK.level!=null?`változás ${sgn(PK.chg)} cm/24 h · hozam ${PK.q!=null?fmt(PK.q):na} m³/s · vízhő ${PK.temp!=null?fmt1(PK.temp):na} °C · paksi mérce, 1531,3 fkm`:'a paksi mérce ma nem közölt adatot',
+    share:PK.q!=null?Math.min(1,PK.q/duna.qout):.05, col:'var(--hl)'},
+   {cls:'thl', lbl:'Itthon most hozzáadott víz', v:sgn(QDOML), u:'m³/s',
+    note:QDOML>=0?`a kilépő és belépő élő hozam különbsége — hazai csapadék, kisvízfolyások, határ menti gyarapodás (sokéves közép: +${fmt(QDOM)})`
+      :`most kevesebb lép ki, mint be — párolgás, vízkivétel és a levonulási idő miatt kisvízkor előfordul (sokéves közép: +${fmt(QDOM)})`,
+    share:Math.min(1,Math.abs(QDOML)/QOUTL), col:'var(--hl)'},
+   {cls:'tin', lbl:'A legbővizűbb belépő: a Duna', v:dunaL!=null?fmt(dunaL):fmt(duna.qin), u:'m³/s',
+    note:dunaL!=null?`Nagybajcsnál (Vámosszabadi) mérve — a sokéves közép (${fmt(duna.qin)} m³/s) ${Math.round(dunaL/duna.qin*100)}%-a`
+      :`Rajkánál lép be — önmagában a mért belépő hozam ${Math.round(duna.qin/QIN*100)}%-a`,
+    share:(dunaL??duna.qin)/QINL, col:'var(--in)'},
+  ] : [
+   {cls:'tin', lbl:'This much water enters the country now', v:fmt(QINL), u:'m³/s',
+    note:`morning flow at ${NINL} measured border gauges · ${Math.round(QINL/QIN*100)}% of the long-term mean (${fmt(QIN)} m³/s)`,
+    share:Math.min(1,QINL/QIN), col:'var(--in)'},
+   {cls:'tout', lbl:'This much water leaves the country now', v:fmt(QOUTL), u:'m³/s',
+    note:`measured at Dunaszekcső (Danube), Szeged (Tisza) and Drávaszabolcs (Dráva) · long-term mean: ${fmt(QOUT)} m³/s`,
+    share:Math.min(1,QOUTL/QOUT), col:'var(--out)'},
+   {cls:'thl', lbl:'Danube stage at Paks — now', v:PK.level!=null?String(PK.level):na, u:'cm',
+    note:PK.level!=null?`${sgn(PK.chg)} cm/24 h · flow ${PK.q!=null?fmt(PK.q):na} m³/s · water ${PK.temp!=null?fmt1(PK.temp):na} °C · Paks gauge, river-km 1531.3`:'the Paks gauge reported no data today',
+    share:PK.q!=null?Math.min(1,PK.q/duna.qout):.05, col:'var(--hl)'},
+   {cls:'thl', lbl:'Water added within Hungary now', v:sgn(QDOML), u:'m³/s',
+    note:QDOML>=0?`difference of live out- and inflow — domestic rainfall, streams and gains along border reaches (long-term mean: +${fmt(QDOM)})`
+      :`less water leaves than enters — evaporation, withdrawals and travel time make this normal in low-water spells (long-term mean: +${fmt(QDOM)})`,
+    share:Math.min(1,Math.abs(QDOML)/QOUTL), col:'var(--hl)'},
+   {cls:'tin', lbl:'Biggest inflow: the Danube', v:dunaL!=null?fmt(dunaL):fmt(duna.qin), u:'m³/s',
+    note:dunaL!=null?`measured at Nagybajcs (Vámosszabadi) — ${Math.round(dunaL/duna.qin*100)}% of its long-term mean (${fmt(duna.qin)} m³/s)`
+      :`enters at Rajka — ${Math.round(duna.qin/QIN*100)}% of all measured inflow by itself`,
+    share:(dunaL??duna.qin)/QINL, col:'var(--in)'},
+  ];
+  document.getElementById('kpis').innerHTML = KPIS.map(k=>`
+    <div class="card kpi ${k.cls}">
+      <div class="lbl">${k.lbl}</div>
+      <div class="v">${k.v}<span class="u">${k.u}</span></div>
+      <div class="note">${k.note}</div>
+      <div class="share"><i style="width:${Math.max(2,k.share*100)}%;background:${k.col}"></i></div>
+    </div>`).join('');
+}
 
 /* ---- mérleg sáv (élő) ----
    a sáv kék→korall átmenete a víz útját jelzi: balról belép, jobbra kilép;
    pozitív hazai hozzáadásnál jelölő mutatja, meddig tart a külföldi hányad */
-document.getElementById('balbar').innerHTML = QDOML>=0
-  ? `<i class="mark" style="left:${(QINL/QOUTL*100).toFixed(1)}%"></i>` : '';
-document.getElementById('balcap').innerHTML =
-  `<span>külföldről lép be most: <b style="color:#6FAEF2">${fmt(QINL)} m³/s</b></span>
-   ${QDOML>=0
-     ? `<span>itthon keletkezik (a jelöléstől jobbra): <b>+${fmt(QDOML)} m³/s (${Math.round(QDOML/QOUTL*100)}%)</b></span>`
-     : `<span>útközben elfogy (párolgás, vízkivétel): <b>${fmt(QDOML)} m³/s</b></span>`}
-   <span>összesen kilép most: <b style="color:#F08A8A">${fmt(QOUTL)} m³/s</b></span>
-   <span class="muted">sokéves közép: be ${fmt(QIN)} · itthon +${fmt(QDOM)} · ki ${fmt(QOUT)}</span>`;
+function renderBalance(){
+  document.getElementById('balbar').innerHTML = QDOML>=0
+    ? `<i class="mark" style="left:${(QINL/QOUTL*100).toFixed(1)}%"></i>` : '';
+  document.getElementById('balcap').innerHTML = hu()
+    ? `<span>külföldről lép be most: <b style="color:#6FAEF2">${fmt(QINL)} m³/s</b></span>
+       ${QDOML>=0
+         ? `<span>itthon keletkezik (a jelöléstől jobbra): <b>+${fmt(QDOML)} m³/s (${Math.round(QDOML/QOUTL*100)}%)</b></span>`
+         : `<span>útközben elfogy (párolgás, vízkivétel): <b>${fmt(QDOML)} m³/s</b></span>`}
+       <span>összesen kilép most: <b style="color:#F08A8A">${fmt(QOUTL)} m³/s</b></span>
+       <span class="muted">sokéves közép: be ${fmt(QIN)} · itthon +${fmt(QDOM)} · ki ${fmt(QOUT)}</span>`
+    : `<span>entering from abroad now: <b style="color:#6FAEF2">${fmt(QINL)} m³/s</b></span>
+       ${QDOML>=0
+         ? `<span>generated at home (right of the marker): <b>+${fmt(QDOML)} m³/s (${Math.round(QDOML/QOUTL*100)}%)</b></span>`
+         : `<span>lost along the way (evaporation, withdrawals): <b>${fmt(QDOML)} m³/s</b></span>`}
+       <span>leaving in total now: <b style="color:#F08A8A">${fmt(QOUTL)} m³/s</b></span>
+       <span class="muted">long-term mean: in ${fmt(QIN)} · home +${fmt(QDOM)} · out ${fmt(QOUT)}</span>`;
+}
 
 /* ---- perspektíva (élő belépő hozamra) ---- */
-const pool = QINL/2500, balatonDays = 1.9e9/QINL/86400, people = QINL*1000/120;
-document.getElementById('persp').innerHTML = `
-  <div class="it"><div class="big"><u>${pool.toLocaleString('hu-HU',{maximumFractionDigits:1})}</u> olimpiai medence</div>
-    <p>ennyi víz lép be az országba <i>másodpercenként</i> (egy 50 m-es medence ≈ 2500 m³)</p></div>
-  <div class="it"><div class="big"><u>${balatonDays.toLocaleString('hu-HU',{maximumFractionDigits:1})}</u> nap</div>
-    <p>ennyi idő alatt töltené fel a belépő víz a <i>teljes Balatont</i> (≈ 1,9 km³)</p></div>
-  <div class="it"><div class="big"><u>${Math.round(people/1000).toLocaleString('hu-HU')} ezer</u> ember</div>
-    <p>egész napi vízfogyasztása lép be <i>minden egyes másodpercben</i> (120 l/fő/nap)</p></div>`;
+function renderPersp(){
+  const pool = QINL/2500, balatonDays = 1.9e9/QINL/86400, people = QINL*1000/120;
+  const n1 = pool.toLocaleString(LOC(),{maximumFractionDigits:1});
+  const n2 = balatonDays.toLocaleString(LOC(),{maximumFractionDigits:1});
+  const n3 = Math.round(people/1000).toLocaleString(LOC());
+  document.getElementById('persplbl').innerHTML = hu()
+    ? `a belépő ${fmt(QINL)} m³/s köznapi mértékegységekben`
+    : `the incoming ${fmt(QINL)} m³/s in everyday units`;
+  document.getElementById('persp').innerHTML = hu() ? `
+    <div class="it"><div class="big"><u>${n1}</u> olimpiai medence</div>
+      <p>ennyi víz lép be az országba <i>másodpercenként</i> (egy 50 m-es medence ≈ 2500 m³)</p></div>
+    <div class="it"><div class="big"><u>${n2}</u> nap</div>
+      <p>ennyi idő alatt töltené fel a belépő víz a <i>teljes Balatont</i> (≈ 1,9 km³)</p></div>
+    <div class="it"><div class="big"><u>${n3} ezer</u> ember</div>
+      <p>egész napi vízfogyasztása lép be <i>minden egyes másodpercben</i> (120 l/fő/nap)</p></div>` : `
+    <div class="it"><div class="big"><u>${n1}</u> Olympic pools</div>
+      <p>this much water enters the country <i>every second</i> (a 50 m pool ≈ 2,500 m³)</p></div>
+    <div class="it"><div class="big"><u>${n2}</u> days</div>
+      <p>the time the incoming water would need to fill <i>all of Lake Balaton</i> (≈ 1.9 km³)</p></div>
+    <div class="it"><div class="big"><u>${n3} thousand</u> people</div>
+      <p>the full daily water use of this many people enters <i>every single second</i> (120 l/person/day)</p></div>`;
+}
 
 /* ---- táblázat ---- */
-document.getElementById('tblobs').textContent = LIVE.obs || 'ma';
 const tb = document.querySelector('#rtable tbody');
 const rows = RIVERS.filter(r=>r.dir!=='dom')
   .sort((a,b)=>((liveOut(b)??liveIn(b)??b.qout??b.qin))-((liveOut(a)??liveIn(a)??a.qout??a.qin)));
-const lq = q => q!=null ? fmt(q) : '<span class="muted">n. a.</span>';
-for(const r of rows){
-  const both = r.qin!=null && r.qout!=null;
-  const qi = liveIn(r), qo = liveOut(r);
-  const tr=document.createElement('tr');
-  tr.innerHTML = `<td><b>${r.name}</b></td>
-    <td>${r.qin!=null?'<span class="dir in">BE</span>':''}${r.qout!=null?'<span class="dir out">KI</span>':''}</td>
-    <td>${both? r.inAt+' → '+r.outAt : (r.qin!=null?r.inAt:r.outAt)}</td>
-    <td class="muted">${r.fromTo||''}</td>
-    <td class="q">${both? lq(qi)+' <span class="muted">→</span> '+lq(qo) : lq(r.qin!=null?qi:qo)}</td>
-    <td class="q muted">${both? fmt(r.qin)+' → '+fmt(r.qout) : fmt(r.qin??r.qout)}</td>
-    <td class="muted">${r.mouth||''}</td>`;
-  tb.appendChild(tr);
+function renderTable(){
+  const lq = q => q!=null ? fmt(q) : `<span class="muted">${hu()?'n. a.':'n/a'}</span>`;
+  document.getElementById('detlbl').innerHTML = hu()
+    ? `minden határt átlépő vízfolyás · élő reggeli hozam (${obsTxt()}) és sokéves közép (KÖQ, 1981–2010)`
+    : `every watercourse crossing the border · live morning flow (${obsTxt()}) and long-term mean (KÖQ, 1981–2010)`;
+  document.getElementById('thead').innerHTML = hu()
+    ? `<th>Vízfolyás</th><th>Irány</th><th>Határszelvény / mérce</th><th>Honnan / hová</th>
+       <th class="q">Élő&nbsp;(m³/s)</th><th class="q">KÖQ&nbsp;(m³/s)</th><th>Torkolat</th>`
+    : `<th>Watercourse</th><th>Dir.</th><th>Border gauge</th><th>From / to</th>
+       <th class="q">Live&nbsp;(m³/s)</th><th class="q">Mean&nbsp;(m³/s)</th><th>Mouth</th>`;
+  tb.innerHTML='';
+  for(const r of rows){
+    const both = r.qin!=null && r.qout!=null;
+    const qi = liveIn(r), qo = liveOut(r);
+    const row=document.createElement('tr');
+    row.innerHTML = `<td><b>${r.name}</b></td>
+      <td>${r.qin!=null?`<span class="dir in">${hu()?'BE':'IN'}</span>`:''}${r.qout!=null?`<span class="dir out">${hu()?'KI':'OUT'}</span>`:''}</td>
+      <td>${both? stX(r.inAt)+' → '+stX(r.outAt) : stX(r.qin!=null?r.inAt:r.outAt)}</td>
+      <td class="muted">${rT(r,'fromTo')||''}</td>
+      <td class="q">${both? lq(qi)+' <span class="muted">→</span> '+lq(qo) : lq(r.qin!=null?qi:qo)}</td>
+      <td class="q muted">${both? fmt(r.qin)+' → '+fmt(r.qout) : fmt(r.qin??r.qout)}</td>
+      <td class="muted">${rT(r,'mouth')||''}</td>`;
+    tb.appendChild(row);
+  }
+  const sumTr=document.createElement('tr'); sumTr.className='sum';
+  sumTr.innerHTML=`<td>${hu()?'Összesen':'Total'}</td><td></td><td></td><td></td>
+    <td class="q" style="color:var(--in)">${fmt(QINL)} <span class="muted">→</span> <span style="color:var(--out)">${fmt(QOUTL)}</span></td>
+    <td class="q muted">${fmt(QIN)} → ${fmt(QOUT)}</td><td></td>`;
+  tb.appendChild(sumTr);
 }
-const sumTr=document.createElement('tr'); sumTr.className='sum';
-sumTr.innerHTML=`<td>Összesen</td><td></td><td></td><td></td>
-  <td class="q" style="color:var(--in)">${fmt(QINL)} <span class="muted">→</span> <span style="color:var(--out)">${fmt(QOUTL)}</span></td>
-  <td class="q muted">${fmt(QIN)} → ${fmt(QOUT)}</td><td></td>`;
-tb.appendChild(sumTr);
+
+/* ---- lábléc ---- */
+function renderFooter(){
+  document.getElementById('ftp1').innerHTML = hu()
+    ? `Az elsődleges számok <b>élő adatok</b>: az Országos Vízjelző Szolgálat napi hidrológiai táblájának
+       reggeli észlelései (<b>${obsTxt()}</b>, lekérdezve: ${fetchedTxt()}) a
+       <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>-ról. Viszonyításul mindenütt szerepel a
+       <b>sokéves középvízhozam (KÖQ, 1981–2010)</b> a VGT3 határszelvény-táblázata alapján. Az oldal
+       újrapublikáláskor frissül — a „lekérdezve" időpont mutatja, mennyire friss, amit látsz.`
+    : `The headline figures are <b>live data</b>: morning readings of the National Hydrological Forecasting
+       Service's daily table (<b>${obsTxt()}</b>, retrieved: ${fetchedTxt()}) via
+       <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>. For reference, the
+       <b>long-term mean discharge (KÖQ, 1981–2010)</b> from the VGT3 border-gauge table is shown throughout.
+       The page refreshes when republished — the "retrieved" timestamp shows how fresh what you see is.`;
+  document.getElementById('ftp2').innerHTML = hu()
+    ? `Mérce-megjegyzések: a Duna belépő élő hozama a <b>nagybajcsi</b> mércén mért
+       (a bősi üzemvízcsatorna visszatorkollása alatt, Vámosszabadinál); kilépő hozama a <b>dunaszekcsői</b> mércéről
+       származik, mert Mohács vízhozamot nem közöl. A Dráva belépő hozama élőben közvetlenül Őrtilosnál mért érték
+       (a KÖQ-nél még számított: Botovo mínusz Mura). A Lajta, a Kerka és a Ronyva nem közöl élő hozamot — ott a KÖQ
+       szerepel, és az élő összegekben nem számítjuk őket. Néhány kis határátlépő vízfolyásról (Ikva, Gyöngyös,
+       Lendva, Karasica) nincs hivatalos adat, ezek a listában nem szerepelnek.`
+    : `Gauge notes: the Danube's live inflow is measured at <b>Nagybajcs</b> (below the return of the Gabčíkovo
+       headrace canal, near Vámosszabadi); its outflow comes from the <b>Dunaszekcső</b> gauge, as Mohács reports
+       no discharge. The Dráva's live inflow is measured directly at Őrtilos (its long-term mean is still a
+       computed Botovo-minus-Mura value). The Lajta, Kerka and Ronyva report no live discharge — their long-term
+       means are shown instead, excluded from the live totals. A few small border-crossing streams (Ikva, Gyöngyös,
+       Lendva, Karasica) have no official data and are not listed.`;
+  document.getElementById('ftsrc').innerHTML = hu()
+    ? `Adatforrások: élő adatok — <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>
+       (OVSZ, napi hidrológiai adatok); sokéves közép — Országos Vízügyi Főigazgatóság
+       (<a href="https://www.vizugy.hu" rel="noopener">vizugy.hu</a>, VGT3), Wikipédia. ·
+       Látogatottságmérés: Cloudflare Web Analytics — süti és személyes adat nélkül. ·
+       Nem hivatalos, ismeretterjesztő oldal.`
+    : `Data sources: live data — <a href="https://www.hydroinfo.hu" rel="noopener">hydroinfo.hu</a>
+       (OVSZ daily hydrological tables); long-term means — General Directorate of Water Management
+       (<a href="https://www.vizugy.hu" rel="noopener">vizugy.hu</a>, VGT3), Wikipedia. ·
+       Visitor stats: Cloudflare Web Analytics — no cookies, no personal data. ·
+       Unofficial, educational page.`;
+}
+
+/* ---- nyelvváltás ---- */
+function renderAll(){
+  document.documentElement.lang = LANG;
+  document.title = tr('title');
+  document.getElementById('brandh').innerHTML = tr('brand');
+  for(const n of document.querySelectorAll('[data-i18n]')) n.textContent = tr(n.dataset.i18n);
+  for(const c of countryEls) c.t.textContent = hu()?c.nh:c.ne;
+  setArrowTexts();
+  if(pmarkLbl) pmarkLbl.textContent = tr('paksLbl');
+  renderHeader(); renderFlowlist(); renderKpis(); renderBalance(); renderPersp(); renderTable(); renderFooter();
+  for(const b of document.querySelectorAll('#langsw button')) b.classList.toggle('on', b.dataset.lang===LANG);
+}
+for(const b of document.querySelectorAll('#langsw button'))
+  b.addEventListener('click',()=>{ if(b.dataset.lang!==LANG){ LANG=b.dataset.lang;
+    try{localStorage.setItem('holaviz-lang',LANG);}catch(e){} renderAll(); }});
+renderAll();
 
 /* ---- óra ---- */
 const tick = () => document.getElementById('clock').textContent =
