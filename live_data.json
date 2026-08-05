@@ -1,23 +1,23 @@
 {
- "obs": "2026. augusztus 04.",
- "fetched": "2026-08-04T16:25+02:00",
- "fetched_hu": "2026. 08. 04. 16:25",
+ "obs": "2026. augusztus 05.",
+ "fetched": "2026-08-05T09:41+02:00",
+ "fetched_hu": "2026. 08. 05. 09:41",
  "source": "hydroinfo.hu (Országos Vízjelző Szolgálat)",
  "rivers": {
   "duna": {
    "in": {
     "st": "Nagybajcs (Vámosszabadi)",
-    "level": -32,
-    "chg": 4,
-    "q": 650,
+    "level": -31,
+    "chg": 1,
+    "q": 653,
     "temp": 24.8
    },
    "out": {
     "st": "Dunaszekcső (Mohács fölött)",
-    "level": -10,
-    "chg": -4,
-    "q": 678,
-    "temp": 26.9
+    "level": -9,
+    "chg": 1,
+    "q": 687,
+    "temp": 27.3
    }
   },
   "mosoni-duna": {
@@ -32,27 +32,27 @@
   "lajta": {
    "in": {
     "st": "Hegyeshalom",
-    "level": -8,
-    "chg": -2,
+    "level": -9,
+    "chg": -1,
     "q": null,
-    "temp": 25.1
+    "temp": 24.5
    }
   },
   "raba": {
    "in": {
     "st": "Szentgotthárd",
-    "level": -118,
+    "level": -120,
     "chg": -2,
-    "q": 4.44,
+    "q": 4.2,
     "temp": 19.8
    }
   },
   "pinka": {
    "in": {
     "st": "Felsőcsatár",
-    "level": 30,
-    "chg": 0,
-    "q": 0.07,
+    "level": 29,
+    "chg": -1,
+    "q": 0.062,
     "temp": null
    }
   },
@@ -60,7 +60,7 @@
    "in": {
     "st": "Répcevis",
     "level": -6,
-    "chg": 1,
+    "chg": 0,
     "q": 0.2,
     "temp": null
    }
@@ -68,71 +68,71 @@
   "mura": {
    "in": {
     "st": "Letenye",
-    "level": 92,
-    "chg": 0,
-    "q": 57.0,
-    "temp": 25.9
+    "level": 91,
+    "chg": -1,
+    "q": 56.0,
+    "temp": 26.0
    }
   },
   "drava": {
    "in": {
     "st": "Őrtilos",
-    "level": -120,
-    "chg": 7,
-    "q": 215,
-    "temp": 25.9
+    "level": -124,
+    "chg": -4,
+    "q": 207,
+    "temp": 25.7
    },
    "out": {
     "st": "Drávaszabolcs",
-    "level": -38,
-    "chg": 15,
-    "q": 209,
-    "temp": 26.8
+    "level": -40,
+    "chg": -2,
+    "q": 205,
+    "temp": 26.9
    }
   },
   "ipoly": {
    "in": {
     "st": "Ipolytarnóc",
-    "level": 30,
-    "chg": 1,
-    "q": 0.319,
-    "temp": 22.6
+    "level": 29,
+    "chg": -1,
+    "q": 0.305,
+    "temp": 23.2
    }
   },
   "sajo": {
    "in": {
     "st": "Sajópüspöki",
     "level": 18,
-    "chg": 2,
+    "chg": 0,
     "q": 2.89,
-    "temp": 23.3
+    "temp": 23.7
    }
   },
   "bodva": {
    "in": {
     "st": "Hidvégardó",
-    "level": -33,
+    "level": -34,
     "chg": -1,
-    "q": 0.276,
-    "temp": 19.8
+    "q": 0.254,
+    "temp": 19.4
    }
   },
   "hernad": {
    "in": {
     "st": "Hidasnémeti",
-    "level": -111,
-    "chg": 3,
-    "q": 9.51,
+    "level": -112,
+    "chg": -1,
+    "q": 9.21,
     "temp": null
    }
   },
   "bodrog": {
    "in": {
     "st": "Felsőberecki",
-    "level": 174,
+    "level": 168,
     "chg": -6,
-    "q": 12.1,
-    "temp": 25.7
+    "q": 11.6,
+    "temp": 26.4
    }
   },
   "tisza": {
@@ -141,74 +141,74 @@
     "level": -238,
     "chg": 0,
     "q": 34.4,
-    "temp": 25.6
+    "temp": 25.7
    },
    "out": {
     "st": "Szeged",
-    "level": 60,
-    "chg": 0,
-    "q": 125,
-    "temp": 26.4
+    "level": 58,
+    "chg": -2,
+    "q": 116,
+    "temp": 26.7
    }
   },
   "tur": {
    "in": {
     "st": "Garbolc",
-    "level": -99,
-    "chg": -2,
-    "q": 0.771,
-    "temp": 24.3
+    "level": -98,
+    "chg": 1,
+    "q": 0.787,
+    "temp": 24.4
    }
   },
   "szamos": {
    "in": {
     "st": "Csenger",
-    "level": -149,
-    "chg": -1,
-    "q": 20.1,
-    "temp": 26.8
+    "level": -153,
+    "chg": -4,
+    "q": 18.4,
+    "temp": 27.0
    }
   },
   "kraszna": {
    "in": {
     "st": "Ágerdőmajor",
-    "level": 121,
+    "level": 117,
     "chg": -4,
-    "q": 0.349,
-    "temp": 25.0
+    "q": 0.325,
+    "temp": 25.4
    }
   },
   "berettyo": {
    "in": {
     "st": "Pocsaj",
     "level": -51,
-    "chg": -2,
+    "chg": 0,
     "q": 0.466,
-    "temp": 21.9
+    "temp": 22.1
    }
   },
   "sebes-koros": {
    "in": {
     "st": "Körösszakál",
-    "level": -196,
-    "chg": 3,
-    "q": 0.961,
-    "temp": 25.2
+    "level": -199,
+    "chg": -3,
+    "q": 1.07,
+    "temp": 25.4
    }
   },
   "fekete-koros": {
    "in": {
     "st": "Sarkad",
     "level": 117,
-    "chg": -1,
-    "q": 0.936,
-    "temp": 26.4
+    "chg": 0,
+    "q": 0.79,
+    "temp": 26.3
    }
   },
   "feher-koros": {
    "in": {
     "st": "Gyula",
-    "level": 106,
+    "level": 105,
     "chg": -1,
     "q": 0.0,
     "temp": 24.0
@@ -217,63 +217,94 @@
   "maros": {
    "in": {
     "st": "Nagylak",
-    "level": -60,
+    "level": -72,
     "chg": -12,
-    "q": 53.0,
-    "temp": 27.6
+    "q": 44.8,
+    "temp": 27.4
    }
   },
   "kettos-koros": {
    "w": {
     "st": "Doboz",
-    "level": 365,
-    "chg": 0,
+    "level": 364,
+    "chg": -1,
     "q": null,
-    "temp": 24.3
+    "temp": 24.5
    }
   },
   "harmas-koros": {
    "w": {
     "st": "Kunszentmárton",
-    "level": -186,
+    "level": -187,
     "chg": -1,
-    "q": 5.58,
+    "q": 5.25,
     "temp": null
    }
   },
   "zagyva": {
    "w": {
     "st": "Jásztelek",
-    "level": 107,
+    "level": 104,
     "chg": -3,
     "q": null,
-    "temp": 26.0
+    "temp": 26.2
    }
   },
   "zala": {
    "w": {
     "st": "Zalaapáti",
-    "level": 90,
-    "chg": 0,
-    "q": 0.556,
+    "level": 89,
+    "chg": -1,
+    "q": 0.465,
     "temp": null
    }
   },
   "sio": {
    "w": {
     "st": "Szekszárd (Palánk)",
-    "level": 237,
+    "level": 236,
     "chg": -1,
     "q": null,
-    "temp": 25.6
+    "temp": 25.9
    }
+  }
+ },
+ "lakes": {
+  "balaton": {
+   "st": "Balaton (átlag)",
+   "level": 54,
+   "chg": 0,
+   "q": null,
+   "temp": 26.2,
+   "tempst": "Siófok"
+  },
+  "velencei": {
+   "st": "Agárd",
+   "level": 29,
+   "chg": -1,
+   "q": null,
+   "temp": 26.8
+  },
+  "ferto": {
+   "st": "Fertőrákos",
+   "level": 9,
+   "chg": -2,
+   "q": null,
+   "temp": 25.9
+  },
+  "tisza-to": {
+   "st": "Kisköre-felső (duzzasztott tér)",
+   "level": 695,
+   "chg": -3,
+   "q": null,
+   "temp": 28.0
   }
  },
  "paks": {
   "st": "Paks",
-  "level": -138,
-  "chg": -1,
-  "q": 725,
-  "temp": 27.9
+  "level": -134,
+  "chg": 4,
+  "q": 735,
+  "temp": 28.0
  }
 }

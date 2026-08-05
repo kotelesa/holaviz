@@ -62,6 +62,8 @@ body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none
 .map svg{display:block;width:100%;height:auto}
 #hun{fill:#10203A;stroke:#3C5B82;stroke-width:1.2;stroke-linejoin:round}
 .lake{fill:var(--lake);stroke:#2A4A72;stroke-width:.7}
+.lake.has{cursor:crosshair;transition:filter .2s}
+.lake.has:hover{filter:brightness(1.6)}
 .river{fill:none;stroke:var(--river);stroke-linecap:round;stroke-linejoin:round;transition:opacity .2s}
 .river.in{stroke:var(--in)}
 .river.out{stroke:var(--out)}
@@ -215,7 +217,7 @@ footer .src{margin-top:6px}
 
   <!-- térkép -->
   <div class="card map mapwrap">
-    <div class="hint" id="hint">Vidd az egeret egy folyóra vagy nyílra</div>
+    <div class="hint" id="hint">Vidd az egeret egy folyóra, tóra vagy nyílra</div>
     <div id="mapbox" style="position:relative"></div>
     <div class="maptip" id="tip"></div>
     <div class="legend">
@@ -327,8 +329,26 @@ for(const [n,x,y,rot] of COUNTRIES){
   t.textContent=n; svg.appendChild(t);
 }
 
-/* tavak */
-for(const d of Object.values(GEO.lakes)) svg.appendChild(el('path',{d,class:'lake'}));
+/* tavak — élő vízszint a tooltipben */
+const LAKE_NAMES = {balaton:'Balaton', 'tisza-to':'Tisza-tó', ferto:'Fertő', velencei:'Velencei-tó'};
+for(const [lid,d] of Object.entries(GEO.lakes)){
+  const p = el('path',{d,class:'lake'});
+  const L = (LIVE.lakes||{})[lid];
+  if(L && L.level!=null){
+    p.classList.add('has');
+    p.addEventListener('pointerenter',e=>{
+      tip.innerHTML = `<h4 style="color:#7FB8E8">${LAKE_NAMES[lid]||lid}</h4>
+        <div class="row"><span>vízállás · ${L.st}</span><b>${L.level} cm</b></div>
+        <div class="row"><span>változás 24 óra alatt</span><b>${sgn(L.chg)} cm</b></div>
+        ${L.temp!=null?`<div class="row"><span>vízhőmérséklet${L.tempst?' · '+L.tempst:''}</span><b>${fmt1(L.temp)} °C</b></div>`:''}
+        <div class="note">Reggeli észlelés: ${LIVE.obs||'—'} · hydroinfo.hu</div>`;
+      tip.classList.add('on'); hint.style.opacity=0; moveTip(e);
+    });
+    p.addEventListener('pointermove',moveTip);
+    p.addEventListener('pointerleave',hideTip);
+  }
+  svg.appendChild(p);
+}
 
 /* folyó vastagság a hozamból */
 const wOf = q => q==null ? 1.2 : Math.max(1.1, .58*Math.pow(q,1/3));

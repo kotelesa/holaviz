@@ -86,6 +86,15 @@ STATIONS = {
 
 PAKS = ('Duna', 'Paks')
 
+# tavak — vízszint a jellemző mércén; a Tisza-tavat a Kisköre-felső
+# (duzzasztott tér) mérce adja. A kulcsok a geometry.json tó-azonosítói.
+LAKES = {
+    'balaton':  ('Balaton', 'Balaton átlag', 'Balaton (átlag)'),
+    'velencei': ('Velencei-tó', 'Agárd', 'Agárd'),
+    'ferto':    ('Fertő-tó', 'Fertőrákos', 'Fertőrákos'),
+    'tisza-to': ('Tisza', 'Kisköre felső', 'Kisköre-felső (duzzasztott tér)'),
+}
+
 
 def main():
     rows = {}
@@ -109,6 +118,14 @@ def main():
         if entry:
             rivers[rid] = entry
 
+    lakes = {lid: r for lid, spec in LAKES.items() if (r := rec(spec))}
+    # a Balaton-átlag mérce vízhőt nem közöl — a siófokiét vesszük át
+    if 'balaton' in lakes and lakes['balaton'].get('temp') is None:
+        sio = rows.get(('Balaton', 'Siófok'))
+        if sio and sio.get('temp') is not None:
+            lakes['balaton']['temp'] = sio['temp']
+            lakes['balaton']['tempst'] = 'Siófok'
+
     now = datetime.now(ZoneInfo('Europe/Budapest'))
     out = {
         'obs': obs,
@@ -116,13 +133,14 @@ def main():
         'fetched_hu': now.strftime('%Y. %m. %d. %H:%M'),
         'source': 'hydroinfo.hu (Országos Vízjelző Szolgálat)',
         'rivers': rivers,
+        'lakes': lakes,
         'paks': rec((*PAKS, None)),
     }
     json.dump(out, open('live_data.json', 'w'), ensure_ascii=False, indent=1)
 
     n_in = sum(1 for r in rivers.values() if r.get('in') and r['in']['q'] is not None)
     print(f"live_data.json — észlelés: {obs} · {len(rows)} állomás beolvasva, "
-          f"{n_in} belépő szelvényen van élő hozam · Paks: {out['paks']}")
+          f"{n_in} belépő szelvényen van élő hozam · {len(lakes)} tó · Paks: {out['paks']}")
 
 
 if __name__ == '__main__':
