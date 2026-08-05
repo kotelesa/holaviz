@@ -2,7 +2,8 @@ name: Napi frissítés és publikálás
 
 on:
   schedule:
-    - cron: '35 8 * * *'   # UTC! — nyáron 10:35, télen 9:35 magyar idő
+    - cron: '0 6 * * *'    # UTC! — nyáron 8:00, télen 7:00 magyar idő
+    - cron: '35 8 * * *'   # tartalék futás (10:35/9:35), ha reggel még a tegnapi tábla volt kint
   push:
     branches: [main]
   workflow_dispatch:        # kézi indítás az Actions fülről
