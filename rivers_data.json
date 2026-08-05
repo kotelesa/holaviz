@@ -442,5 +442,15 @@
 "fromTo": "",
 "mouth": "",
 "note": "A Balaton szabályozott leeresztő csatornája Siófoktól a Dunáig — hozama a zsilip nyitásától függ."
+},
+{
+"id": "szinva",
+"name": "Szinva",
+"dir": "dom",
+"qw": 0.3,
+"qnote": "~0,3 m³/s · nincs élő mérce",
+"fromTo": "",
+"mouth": "",
+"note": "A Bükk karsztforrásaiból táplálkozó patak: Lillafürednél zúdul le a ~20 méteres Szinva-vízesésen — az ország legmagasabb állandó vízesésén —, majd Miskolc belvárosán átfolyva a Sajóba torkollik. Vízjárása erősen ingadozó, aszályban a felső szakasza elapadhat; hivatalos élő mércéje nincs."
 }
 ]
