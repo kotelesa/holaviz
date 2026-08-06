@@ -2,8 +2,15 @@ name: Napi frissítés és publikálás
 
 on:
   schedule:
-    - cron: '0 6 * * *'    # UTC! — nyáron 8:00, télen 7:00 magyar idő
-    - cron: '35 8 * * *'   # tartalék futás (10:35/9:35), ha reggel még a tegnapi tábla volt kint
+    # A GitHub ütemezője "best effort": kerek perceknél órákat késhet vagy ki is
+    # maradhat (2026-08-06-án pl. egy futás sem indult el). Ezért több, elcsúsztatott,
+    # nem kerek perces időpont — az első sikeres futás kiteszi a friss adatot,
+    # a többi ártalmatlan ismétlés. Az időpontok UTC-ben értendők (nyáron +2 óra).
+    - cron: '7 6 * * *'    # ~8:07 magyar idő (nyáron)
+    - cron: '23 7 * * *'   # ~9:23
+    - cron: '41 8 * * *'   # ~10:41
+    - cron: '11 10 * * *'  # ~12:11
+    - cron: '17 13 * * *'  # ~15:17 — délutáni biztosíték
   push:
     branches: [main]
   workflow_dispatch:        # kézi indítás az Actions fülről
