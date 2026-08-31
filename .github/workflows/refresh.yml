@@ -6,8 +6,12 @@ on:
     # maradhat (2026-08-06-án pl. egy futás sem indult el). Ezért több, elcsúsztatott,
     # nem kerek perces időpont — az első sikeres futás kiteszi a friss adatot,
     # a többi ártalmatlan ismétlés. Az időpontok UTC-ben értendők (nyáron +2 óra).
+    # A friss reggeli észlelés jellemzően délelőtt (~9:45 körül) jelenik meg
+    # a hydroinfo.hu-n — a 10 körüli futás kapja el leghamarabb, a korábbiak
+    # arra jók, ha egyszer hamarabb publikálnának.
     - cron: '7 6 * * *'    # ~8:07 magyar idő (nyáron)
-    - cron: '23 7 * * *'   # ~9:23
+    - cron: '4 7 * * *'    # ~9:04
+    - cron: '3 8 * * *'    # ~10:03
     - cron: '41 8 * * *'   # ~10:41
     - cron: '11 10 * * *'  # ~12:11
     - cron: '17 13 * * *'  # ~15:17 — délutáni biztosíték
