@@ -5,7 +5,7 @@ Kimenet: live_data.json — folyónkénti friss (reggeli észlelésű) vízhozam
 vízállás, 24 órás változás és vízhőmérséklet, plusz a paksi Duna-mérce.
 Futtatás: python3 fetch_live.py && python3 build_page.py
 """
-import json, re, html, urllib.request
+import json, re, html, sys, time, traceback, urllib.error, urllib.request
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -13,11 +13,33 @@ BASE = 'https://www.hydroinfo.hu/tables/'
 TABLES = ['dunhid_a.html', 'tishid_a.html']   # adatsorok (Duna ill. Tisza vízrendszer)
 HEADER = 'dunhid_f.html'                       # fejléc — innen jön az észlelés dátuma
 
+# Böngészőszerű fejlécek: a hydroinfo.hu 2026-08-25 óta elutasítja a
+# "gyanús" (bot-UA-jú) kéréseket a GitHub-futtatók felől.
+HEADERS = {
+    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                   'AppleWebKit/537.36 (KHTML, like Gecko) '
+                   'Chrome/126.0.0.0 Safari/537.36'),
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'hu-HU,hu;q=0.9,en;q=0.8',
+}
 
-def get(url):
-    req = urllib.request.Request(url, headers={'User-Agent': 'holaviz/1.0'})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode('iso-8859-2')
+
+def get(url, tries=3, wait=15):
+    """Letöltés újrapróbálkozással; a végleges hibát részletesen jelenti."""
+    for i in range(1, tries + 1):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode('iso-8859-2')
+        except urllib.error.HTTPError as e:
+            body = e.read(300).decode('iso-8859-2', 'replace')
+            last = f'HTTP {e.code} {e.reason} — válasz eleje: {body!r}'
+        except Exception as e:
+            last = f'{type(e).__name__}: {e}'
+        if i < tries:
+            print(f'{url} — {i}. próba sikertelen ({last}), várakozás {wait}s…')
+            time.sleep(wait)
+    raise RuntimeError(f'{url} letöltése {tries} próbából sem sikerült: {last}')
 
 
 def num(s):
@@ -155,4 +177,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        # GitHub Actions annotáció: a hiba oka a futás összefoglalójában
+        # olvasható, nem kell hozzá a logot bogarászni.
+        print(f'::error title=fetch_live.py hiba::{e}')
+        traceback.print_exc()
+        sys.exit(1)
