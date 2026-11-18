@@ -49,6 +49,13 @@ közvetlenül **Őrtilos**. A Lajta, Kerka, Ronyva nem közöl élő hozamot →
 jelöléssel, az élő összegekben nem szerepelnek. **Paks** külön jelölőt és
 KPI-kártyát kap (vízállás, változás, hozam, vízhő).
 
+**Mályi-tó**: a térkép léptékén körvonalként nem látszana, ezért pontjel
+(`build_geometry.py` → `LAKE_POINTS`, a sablonban `lakeInfo`). Hivatalos
+vízmércéje nincs — a hatósági fürdővízprofil szerint a tavon nincs kiépített
+észlelőhely —, ezért a tooltip statikus adatokat mutat: bányató (egykori
+kavicsbánya), ~34 ha, átlagosan ~6 m, helyenként 10–15 m mély; vízszintjét a
+talajvíz, a csapadék és a párolgás alakítja.
+
 **Viszonyítás**: sokéves középvízhozamok (KÖQ, 1981–2010), forrás: VGT3 6-8.
 háttéranyag határszelvény-táblázata (vizeink.hu / OVF). Kulcsszámok: belépő
 ~3 252 m³/s (24 vízfolyás), kilépő ~3 699 m³/s (Duna Mohács 2 342, Tisza 855,

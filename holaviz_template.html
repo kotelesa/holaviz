@@ -73,6 +73,12 @@ body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none
 .lake{fill:var(--lake);stroke:#2A4A72;stroke-width:.7}
 .lake.has{cursor:crosshair;transition:filter .2s}
 .lake.has:hover{filter:brightness(1.6)}
+/* kis tó pontjelként (a térkép léptékén körvonalként nem látszana) */
+.lakept{cursor:crosshair}
+.lakept .dot{fill:var(--lake);stroke:#7FB8E8;stroke-width:1.1;transition:fill .2s}
+.lakept:hover .dot{fill:#2F6DA8}
+.lakept .hit{fill:transparent}
+.lakept text{fill:#7FA6CC;font-size:9px;letter-spacing:.06em}
 .river{fill:none;stroke:var(--river);stroke-linecap:round;stroke-linejoin:round;transition:opacity .2s}
 .river.in{stroke:var(--in)}
 .river.out{stroke:var(--out)}
@@ -359,14 +365,17 @@ const T = {
   lgIn:'belépő víz',lgOut:'kilépő víz',lgDom:'hazai vízfolyás',lgLake:'állóvíz',
   endsIn:'külföldről belépő víz',endsOut:'összes kilépő víz',
   perspH:'Mennyi ez valójában?',detailH:'Folyóról folyóra',
-  avgPfx:'KÖQ ',liveData:'élő adat',
+  avgPfx:'KÖQ ',liveData:'utoljára frissítve',
   paksLbl:'PAKS · DUNA VÍZÁLLÁS',
   enters:'belép',leaves:'kilép',ltm:'sokéves közép (KÖQ)',stage24:'vízállás · 24 h',
   liveNA:'élő: n. a.',domRow:'hazai vízfolyás',liveFlow:'élő hozam',
   stage:'vízállás',chg24:'változás 24 óra alatt',wtemp:'vízhőmérséklet',flow:'vízhozam',
   morning:'Reggeli észlelés',stageMorning:'vízállás (ma reggel)',
   paksNote:'paksi mérce (1531,3 fkm)',
-  lakeNames:{balaton:'Balaton','tisza-to':'Tisza-tó',ferto:'Fertő',velencei:'Velencei-tó'},
+  lakeNames:{balaton:'Balaton','tisza-to':'Tisza-tó',ferto:'Fertő',velencei:'Velencei-tó',malyi:'Mályi-tó'},
+  /* pontként jelölt kis tavak statikus adatai (élő mérce nélkül) */
+  lakeInfo:{malyi:{rows:[['típus','bányató'],['vízfelület','~34 ha'],['átlagos mélység','~6 m'],['legmélyebb pontok','10–15 m'],['élő vízszint','nincs mérce']],
+    note:'Egykori kavicsbánya tava Miskolctól délre, strandokkal és horgászvízzel. Felszíni be- és kifolyása nincs: vízszintjét a talajvíz, a csapadék és a párolgás alakítja. Hivatalos vízmércéje nincs, ezért élő adat nem tartozik hozzá.'}},
  },
  en:{
   title:'Where’s the Water? — Hungary’s river traffic, live',
@@ -376,14 +385,16 @@ const T = {
   lgIn:'water flowing in',lgOut:'water flowing out',lgDom:'domestic stream',lgLake:'lake',
   endsIn:'water entering from abroad',endsOut:'total water leaving',
   perspH:'How much is that, really?',detailH:'River by river',
-  avgPfx:'avg ',liveData:'live data',
+  avgPfx:'avg ',liveData:'last updated',
   paksLbl:'PAKS · DANUBE STAGE',
   enters:'in',leaves:'out',ltm:'long-term mean (KÖQ)',stage24:'stage · 24 h',
   liveNA:'live: n/a',domRow:'domestic stream',liveFlow:'live flow',
   stage:'stage',chg24:'24-hour change',wtemp:'water temperature',flow:'flow',
   morning:'Morning reading',stageMorning:'stage (this morning)',
   paksNote:'Paks gauge (river-km 1531.3)',
-  lakeNames:{balaton:'Lake Balaton','tisza-to':'Lake Tisza',ferto:'Lake Fertő',velencei:'Lake Velence'},
+  lakeNames:{balaton:'Lake Balaton','tisza-to':'Lake Tisza',ferto:'Lake Fertő',velencei:'Lake Velence',malyi:'Lake Mályi'},
+  lakeInfo:{malyi:{rows:[['type','quarry lake'],['surface area','~34 ha'],['mean depth','~6 m'],['deepest spots','10–15 m'],['live level','no gauge']],
+    note:'A former gravel-pit lake south of Miskolc, with beaches and angling. It has no surface inflow or outflow: its level is set by groundwater, rainfall and evaporation. There is no official gauge, so no live reading belongs to it.'}},
  },
 };
 const tr = k => T[LANG][k];
@@ -522,6 +533,26 @@ if(GEO.markers && GEO.markers.paks && LIVE.paks && LIVE.paks.level!=null){
       <div class="row"><span>${tr('flow')}</span><b>${PK.q!=null?fmt(PK.q)+' m³/s':na}</b></div>
       <div class="row"><span>${tr('wtemp')}</span><b>${PK.temp!=null?fmt1(PK.temp)+' °C':na}</b></div>
       <div class="note">${tr('morning')}: ${obsTxt()} · ${tr('paksNote')} · hydroinfo.hu</div>`;
+    tip.classList.add('on'); hint.style.opacity=0; moveTip(e);
+  });
+  g.addEventListener('pointermove',moveTip);
+  g.addEventListener('pointerleave',hideTip);
+}
+
+/* ---- kis tavak pontjelként: statikus adatok a tooltipben (élő mérce nélkül) ---- */
+const lakePtLbls = [];
+for(const [lid,[lx,ly]] of Object.entries(GEO.lakepts||{})){
+  const g = el('g',{class:'lakept'});
+  g.appendChild(el('circle',{cx:lx,cy:ly,r:9,class:'hit'}));
+  g.appendChild(el('circle',{cx:lx,cy:ly,r:3.2,class:'dot'}));
+  const t = el('text',{x:lx-7,y:ly+3,'text-anchor':'end'});
+  g.appendChild(t); lakePtLbls.push({t,lid});
+  svg.appendChild(g);
+  g.addEventListener('pointerenter',e=>{
+    const I = (tr('lakeInfo')||{})[lid] || {rows:[]};
+    tip.innerHTML = `<h4 style="color:#7FB8E8">${tr('lakeNames')[lid]||lid}</h4>`
+      + I.rows.map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')
+      + (I.note?`<div class="note">${I.note}</div>`:'');
     tip.classList.add('on'); hint.style.opacity=0; moveTip(e);
   });
   g.addEventListener('pointermove',moveTip);
@@ -795,6 +826,7 @@ function renderAll(){
   for(const c of countryEls) c.t.textContent = hu()?c.nh:c.ne;
   setArrowTexts();
   if(pmarkLbl) pmarkLbl.textContent = tr('paksLbl');
+  for(const l of lakePtLbls) l.t.textContent = tr('lakeNames')[l.lid]||l.lid;
   renderHeader(); renderFlowlist(); renderKpis(); renderBalance(); renderPersp(); renderTable(); renderFooter();
   for(const b of document.querySelectorAll('#langsw button')) b.classList.toggle('on', b.dataset.lang===LANG);
 }

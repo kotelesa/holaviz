@@ -101,6 +101,13 @@ LAKES = {
     'velencei': [(18.53,47.17),(18.60,47.20),(18.66,47.22),(18.64,47.19),(18.57,47.15),(18.53,47.17)],
 }
 
+# ---- kis tavak pontként ----
+# A térkép léptékén (~0,5 km/px) körvonalként nem látszanának, ezért pontjelet
+# kapnak. Mályi-tó: ~1,0 × 0,6 km-es bányató Miskolctól délre (OSM-középpont).
+LAKE_POINTS = {
+    'malyi': (20.8408, 48.0168),
+}
+
 out = {
     'view': {'w': VIEW_W, 'h': VIEW_H},
     'border': border_path,
@@ -119,6 +126,7 @@ for rid, pts in RIVERS.items():
 for lid, pts in LAKES.items():
     px = [P(lon, lat) for lon, lat in pts]
     out['lakes'][lid] = smooth_path(px) + 'Z'
+out['lakepts'] = {lid: P(lon, lat) for lid, (lon, lat) in LAKE_POINTS.items()}
 
 # városjelek referenciának
 CITIES = {'Budapest': (19.05, 47.50), 'Szeged': (20.15, 46.25), 'Győr': (17.63, 47.69),
