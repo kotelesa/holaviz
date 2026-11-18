@@ -20,7 +20,7 @@ on:
   workflow_dispatch:        # kézi indítás az Actions fülről
 
 permissions:
-  contents: read
+  contents: write   # a frissítési napló commitjához (lásd az utolsó lépést)
   pages: write
   id-token: write
 
@@ -58,3 +58,37 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      # A GitHub a publikus repók ütemezett workflow-it automatikusan letiltja,
+      # ha a repóban 60 napig nincs aktivitás (commit) — 2026-10-30-án emiatt
+      # állt le a frissítés, hiba és figyelmeztetés nélkül. Ezért minden újonnan
+      # publikált észlelési nap egy sort kap a frissítési naplóban: ez a napi
+      # commit tartja életben az ütemezést, a naplóból pedig utólag az is
+      # látszik, mely napokon maradt el a frissítés.
+      # (A GITHUB_TOKEN-nel tolt commit nem indít újabb futást, így nincs hurok.)
+      - name: Frissítési napló vezetése
+        if: github.ref == 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          day=$(jq -r '.obs_iso // empty' live_data.json)
+          if [ -z "$day" ]; then
+            echo "::warning title=Frissítési napló::Nincs észlelési dátum a letöltött adatban, a naplózás kimarad."
+            exit 0
+          fi
+          log=frissitesi-naplo.csv
+          [ -f "$log" ] || echo "eszleles_napja,publikalva_utc" > "$log"
+          if grep -q "^$day," "$log"; then
+            echo "A(z) $day észlelés már szerepel a naplóban — nincs teendő."
+            exit 0
+          fi
+          echo "$day,$(date -u +%Y-%m-%dT%H:%MZ)" >> "$log"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$log"
+          git commit -q -m "Frissítési napló: $day"
+          # a build helyi termékei (holaviz.html, live_data.json) ekkorra már
+          # kint vannak az oldalon — eldobjuk őket, hogy a rebase tiszta legyen
+          git reset -q --hard
+          git pull -q --rebase origin main
+          git push -q origin HEAD:main
+          echo "Naplózva: $day"

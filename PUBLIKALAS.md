@@ -123,3 +123,11 @@ ha a tárhely már úgyis fizetve van és ott akarsz mindent tartani.
   „Jogi nyilatkozat" oldalát az adatok újraközlésének feltételeiről.
 - Az oldal láblécében a „lekérdezve" időpont mutatja, melyik napi állapot van
   kint — ha ez elavul, az Actions fülön látszik, melyik futás és miért hibázott.
+- **60 napos szabály**: a GitHub a publikus repók ütemezett workflow-it
+  automatikusan letiltja, ha a repóban 60 napig nincs aktivitás (commit) —
+  ilyenkor nincs hibás futás, egyszerűen nem indul több (2026-10-30-án ez
+  történt). Ezt előzi meg a workflow utolsó lépése: minden új észlelési napot
+  beír a `frissitesi-naplo.csv`-be és commitolja. Emiatt helyi munka előtt
+  érdemes `git pull`-t futtatni. Ha az ütemezés mégis leállna, az Actions fülön
+  a workflow mellett „disabled" felirat látszik; visszakapcsolás:
+  `gh workflow enable refresh.yml --repo kotelesa/holaviz`.

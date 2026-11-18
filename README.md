@@ -21,6 +21,7 @@ napi automatikus frissítés GitHub Actions-szel) ·
 | `geometry.json` | generált SVG-geometria |
 | `hungary_hi.json` | Magyarország részletes körvonala (georgique/world-geojson) |
 | `elonezet.png` | asztali nézet előnézeti képe (a 2026-08-03-i, még KÖQ-alapú állapotról) |
+| `frissitesi-naplo.csv` | a napi workflow vezeti: minden publikált észlelési nap egy sor (nap, publikálás ideje UTC-ben) — kézzel nem kell szerkeszteni |
 
 ## Frissítés / újraépítés
 
